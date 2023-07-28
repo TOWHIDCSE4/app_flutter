@@ -13,48 +13,28 @@ import 'widget/header_text_tile.dart';
 class ProfileDetailsPage extends StatelessWidget {
   const ProfileDetailsPage({
     super.key,
-    this.profileTitle,
-    this.dateOfBirthTitle,
     this.dateOfBirth,
-    this.nidTitle,
     this.nid,
-    this.creationDayTitle,
     this.creationDay,
-    this.creationlocateTitle,
     this.creationlocate,
-    this.sexTitle,
     this.sex,
-    this.personalInformationTitle,
-    this.addressTitle,
     this.address,
-    this.phoneTitle,
     this.phone,
     this.email,
-    this.jobTitle,
     this.job,
     this.isEnabled = false,
     this.btnText,
     this.onTapContinue,
   });
 
-  final String? profileTitle;
-  final String? dateOfBirthTitle;
   final String? dateOfBirth;
-  final String? nidTitle;
   final String? nid;
-  final String? creationDayTitle;
   final String? creationDay;
-  final String? creationlocateTitle;
   final String? creationlocate;
-  final String? sexTitle;
   final String? sex;
-  final String? personalInformationTitle;
-  final String? addressTitle;
   final String? address;
-  final String? phoneTitle;
   final String? phone;
   final String? email;
-  final String? jobTitle;
   final String? job;
   final bool isEnabled;
   final String? btnText;
@@ -135,30 +115,30 @@ class ProfileDetailsPage extends StatelessWidget {
                     child: Column(
                       children: [
                         HeadingTextTile(
-                          title: profileTitle ?? 'Hồ sơ',
+                          title: 'Hồ sơ',
                           subTitle: 'Xác thực',
                           isVisibleButton: !isEnabled,
                           onTap: () => Get.to(const ProfileAccuracyPage()),
                         ),
                         BodyTextTile(
-                          title: dateOfBirthTitle ?? 'Ngày sinh',
+                          title: 'Ngày sinh',
                           data: dateOfBirth,
                         ),
                         BodyTextTile(
-                          title: nidTitle ?? 'Số CMND/CCCD',
+                          title: 'Số CMND/CCCD',
                           data: nid,
                         ),
                         BodyTextTile(
-                          title: creationDayTitle ?? 'Ngày cấp',
+                          title: 'Ngày cấp',
                           data: creationDay,
                         ),
                         BodyTextTile(
-                          title: creationlocateTitle ?? 'Nơi cấp',
+                          title: 'Nơi cấp',
                           data: creationlocate,
                         ),
                         BodyTextTile(
                           title: 'Giới tính',
-                          data: sexTitle ?? sex,
+                          data: sex,
                         ),
                       ],
                     ),
@@ -175,17 +155,17 @@ class ProfileDetailsPage extends StatelessWidget {
                     child: Column(
                       children: [
                         HeadingTextTile(
-                          title: personalInformationTitle ?? 'Thông tin cá nhân',
+                          title: 'Thông tin cá nhân',
                           subTitle: 'Chỉnh sửa',
                           isVisibleButton: !isEnabled,
                           onTap: () {},
                         ),
                         BodyTextTile(
-                          title: addressTitle ?? 'Địa chỉ',
+                          title: 'Địa chỉ',
                           data: address,
                         ),
                         BodyTextTile(
-                          title: phoneTitle ?? 'Số điện thoại',
+                          title: 'Số điện thoại',
                           data: phone,
                         ),
                         BodyTextTile(
@@ -193,7 +173,7 @@ class ProfileDetailsPage extends StatelessWidget {
                           data: email,
                         ),
                         BodyTextTile(
-                          title: jobTitle ?? 'Nghề nghiệp',
+                          title: 'Nghề nghiệp',
                           data: job,
                         ),
                       ],

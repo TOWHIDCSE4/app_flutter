@@ -85,42 +85,11 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                       email: 'abcdef@gmail.com',
                       job: 'Tự do',
                       isEnabled: true,
-                      //English Version
                       onTapContinue: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProfileDetailsPage(
-                              profileTitle: 'Profile',
-                              dateOfBirthTitle: 'Day of birth',
-                              dateOfBirth: '00/00/0000',
-                              nidTitle: 'Number ID',
-                              nid: '001199016666',
-                              creationDayTitle: 'Creation day',
-                              creationDay: '00/00/0000',
-                              creationlocateTitle: 'Creation day',
-                              creationlocate: 'Công an TP. Hà Nội',
-                              sexTitle: 'Sex',
-                              sex: 'Nam',
-                              personalInformationTitle: 'Personal Infomation',
-                              addressTitle: 'Current adress',
-                              address: '01 ngõ Xã Đàn, Đống Đa, Hà Nội',
-                              phoneTitle: 'Phone number',
-                              phone: '0123456789',
-                              email: 'abcdef@gmail.com',
-                              jobTitle: 'Job',
-                              job: 'Tự do',
-                              isEnabled: true,
-                              btnText: 'Active wallet',
-                              onTapContinue: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const SuccessProfilePage(),
-                                  ),
-                                );
-                              },
-                            ),
+                            builder: (context) => const SuccessProfilePage(),
                           ),
                         );
                       },
