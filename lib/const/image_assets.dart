@@ -4,6 +4,7 @@ class ImageAssets {
   //::::::::::::::::::::::::::::::: Image ASSETS :::::::::::::::::::::::::::::::
   static String get imgCard => 'card'.png;
   static String get imgFrontCard => 'front_card'.png;
+  static String get imgBackCard => 'back_card'.png;
   static String get imgCaptureImage => 'capture_image'.png;
   static String get tickCircle => 'tick_circle'.png;
 

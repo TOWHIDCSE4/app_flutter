@@ -4,7 +4,6 @@ import 'package:gohomy/const/color.dart';
 import 'package:gohomy/const/image_assets.dart';
 import 'package:gohomy/screen/navigator/navigator_screen.dart';
 import 'package:gohomy/screen/profile/profile_details/widget/custom_button.dart';
-import 'package:gohomy/screen/profile/profile_screen.dart';
 
 class SuccessProfilePage extends StatelessWidget {
   const SuccessProfilePage({super.key});

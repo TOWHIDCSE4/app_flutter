@@ -28,7 +28,7 @@ class BackCardVerificationPage extends StatelessWidget {
       body: CardVerificationTile(
         title: "mặt sau CMND/CCCD",
         instruction: "Xin đưa mặt sau của CMND/CCCD vào khung hình, hệ thống sẽ chụp tự động",
-        imgPath: ImageAssets.imgFrontCard,
+        imgPath: ImageAssets.imgBackCard,
         onTapContinue: () => Get.to(const CaptureImagePage()),
       ),
     );
