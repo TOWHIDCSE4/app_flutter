@@ -5,6 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:gohomy/components/dialog/dialog.dart';
 import 'package:gohomy/components/empty/saha_empty_avatar.dart';
+import 'package:gohomy/const/color.dart';
+import 'package:gohomy/const/image_assets.dart';
 
 import 'package:gohomy/screen/admin/admin_screen.dart';
 import 'package:gohomy/screen/admin/notification_admin/notification_screen.dart';
@@ -67,6 +69,7 @@ import 'e_wallet_histories/e_wallet_histories_screen.dart';
 import 'edit_profile/edit_profile_screen.dart';
 import 'help_post/help_screen.dart';
 import 'problem/problem_screen.dart';
+import 'profile_details/profile_details_page.dart';
 import 'service_sell/cart/cart_screen.dart';
 
 class ProfileLockScreen extends StatelessWidget {
@@ -1513,6 +1516,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           color: Colors.white,
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      // ElevatedButton(
+                                      //   onPressed: () => Get.to(() => const ProfileDetailsPage()),
+                                      //   style: ButtonStyle(
+                                      //     backgroundColor: MaterialStateProperty.all(Colors.white)
+                                      //   ),
+                                      //   child: const Text(
+                                      //     'Kích hoạt',
+                                      //     style: TextStyle(
+                                      //       fontSize: 14,
+                                      //       color: Color(0xFFF83232),
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                      GestureDetector(
+                                        onTap: () => Get.to(() => const ProfileDetailsPage()),
+                                        child: Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              ImageAssets.curvedButton,
+                                            ),
+                                            const Text(
+                                              'Kích hoạt',
+                                              style: TextStyle(
+                                                color: AppColor.primaryColor,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400
+                                              ),
+                                            )
+                                          ],
                                         ),
                                       ),
                                       const SizedBox(
