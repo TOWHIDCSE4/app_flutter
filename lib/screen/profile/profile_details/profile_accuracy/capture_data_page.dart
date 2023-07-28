@@ -119,7 +119,7 @@ class CaptureDataPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 70),
+                SizedBox(height: size.height * 0.22),
                 CustomButton(
                   title: 'Xác thực',
                   bgColor: AppColor.primaryColor,

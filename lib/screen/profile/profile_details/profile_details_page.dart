@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:gohomy/const/color.dart';
 import 'package:gohomy/const/image_assets.dart';
 
 import 'profile_accuracy/profile_accuracy_page.dart';
@@ -10,7 +11,54 @@ import 'widget/custom_button.dart';
 import 'widget/header_text_tile.dart';
 
 class ProfileDetailsPage extends StatelessWidget {
-  const ProfileDetailsPage({super.key});
+  const ProfileDetailsPage({
+    super.key,
+    this.profileTitle,
+    this.dateOfBirthTitle,
+    this.dateOfBirth,
+    this.nidTitle,
+    this.nid,
+    this.creationDayTitle,
+    this.creationDay,
+    this.creationlocateTitle,
+    this.creationlocate,
+    this.sexTitle,
+    this.sex,
+    this.personalInformationTitle,
+    this.addressTitle,
+    this.address,
+    this.phoneTitle,
+    this.phone,
+    this.email,
+    this.jobTitle,
+    this.job,
+    this.isEnabled = false,
+    this.btnText,
+    this.onTapContinue,
+  });
+
+  final String? profileTitle;
+  final String? dateOfBirthTitle;
+  final String? dateOfBirth;
+  final String? nidTitle;
+  final String? nid;
+  final String? creationDayTitle;
+  final String? creationDay;
+  final String? creationlocateTitle;
+  final String? creationlocate;
+  final String? sexTitle;
+  final String? sex;
+  final String? personalInformationTitle;
+  final String? addressTitle;
+  final String? address;
+  final String? phoneTitle;
+  final String? phone;
+  final String? email;
+  final String? jobTitle;
+  final String? job;
+  final bool isEnabled;
+  final String? btnText;
+  final VoidCallback? onTapContinue;
 
   @override
   Widget build(BuildContext context) {
@@ -87,24 +135,30 @@ class ProfileDetailsPage extends StatelessWidget {
                     child: Column(
                       children: [
                         HeadingTextTile(
-                          title: 'Hồ sơ',
+                          title: profileTitle ?? 'Hồ sơ',
                           subTitle: 'Xác thực',
+                          isVisibleButton: !isEnabled,
                           onTap: () => Get.to(const ProfileAccuracyPage()),
                         ),
-                        const BodyTextTile(
-                          title: 'Ngày sinh',
+                        BodyTextTile(
+                          title: dateOfBirthTitle ?? 'Ngày sinh',
+                          data: dateOfBirth,
                         ),
-                        const BodyTextTile(
-                          title: 'Số CMND/CCCD',
+                        BodyTextTile(
+                          title: nidTitle ?? 'Số CMND/CCCD',
+                          data: nid,
                         ),
-                        const BodyTextTile(
-                          title: 'Ngày cấp',
+                        BodyTextTile(
+                          title: creationDayTitle ?? 'Ngày cấp',
+                          data: creationDay,
                         ),
-                        const BodyTextTile(
-                          title: 'Nơi cấp',
+                        BodyTextTile(
+                          title: creationlocateTitle ?? 'Nơi cấp',
+                          data: creationlocate,
                         ),
-                        const BodyTextTile(
+                        BodyTextTile(
                           title: 'Giới tính',
+                          data: sexTitle ?? sex,
                         ),
                       ],
                     ),
@@ -121,21 +175,26 @@ class ProfileDetailsPage extends StatelessWidget {
                     child: Column(
                       children: [
                         HeadingTextTile(
-                          title: 'Thông tin cá nhân',
+                          title: personalInformationTitle ?? 'Thông tin cá nhân',
                           subTitle: 'Chỉnh sửa',
+                          isVisibleButton: !isEnabled,
                           onTap: () {},
                         ),
-                        const BodyTextTile(
-                          title: 'Địa chỉ',
+                        BodyTextTile(
+                          title: addressTitle ?? 'Địa chỉ',
+                          data: address,
                         ),
-                        const BodyTextTile(
-                          title: 'Số điện thoại',
+                        BodyTextTile(
+                          title: phoneTitle ?? 'Số điện thoại',
+                          data: phone,
                         ),
-                        const BodyTextTile(
+                        BodyTextTile(
                           title: 'Email',
+                          data: email,
                         ),
-                        const BodyTextTile(
-                          title: 'Nghề nghiệp',
+                        BodyTextTile(
+                          title: jobTitle ?? 'Nghề nghiệp',
+                          data: job,
                         ),
                       ],
                     ),
@@ -143,10 +202,10 @@ class ProfileDetailsPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 40),
                 CustomButton(
-                  title: 'Kích hoạt ví Renren',
-                  bgColor: const Color(0xFFC7C7C7),
+                  title: btnText ?? 'Kích hoạt ví Renren',
+                  bgColor: isEnabled ? AppColor.primaryColor : AppColor.diabled,
                   width: size.width * 0.85,
-                  onTap: () {},
+                  onTap: isEnabled ? onTapContinue! : () {},
                 ),
               ],
             ),

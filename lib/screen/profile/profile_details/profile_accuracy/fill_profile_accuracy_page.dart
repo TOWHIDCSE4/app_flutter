@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/const/image_assets.dart';
 
+import '../personal_information/personal_information_page.dart';
 import '../widget/body_text_tile.dart';
 import '../widget/custom_button.dart';
 import '../widget/header_text_tile.dart';
-import 'profile_accuracy_page.dart';
 
 class FillProfileAccuracyPage extends StatelessWidget {
   const FillProfileAccuracyPage({super.key});
@@ -107,9 +107,7 @@ class FillProfileAccuracyPage extends StatelessWidget {
                         HeadingTextTile(
                           title: 'Thông tin cá nhân',
                           subTitle: 'Chỉnh sửa',
-                          onTap: () {
-
-                          },
+                          onTap: () => Get.to(const PersonalInformationPage()),
                         ),
                         const BodyTextTile(
                           title: 'Địa chỉ',

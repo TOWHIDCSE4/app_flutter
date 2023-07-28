@@ -6,11 +6,13 @@ class HeadingTextTile extends StatelessWidget {
     super.key,
     required this.title,
     required this.subTitle,
+    this.isVisibleButton = true,
     required this.onTap,
   });
 
   final String title;
   final String subTitle;
+  final bool isVisibleButton;
   final VoidCallback onTap;
 
   @override
@@ -26,7 +28,7 @@ class HeadingTextTile extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        TextButton(
+        isVisibleButton ? TextButton(
           onPressed: onTap,
           child: Text(
             subTitle,
@@ -36,7 +38,7 @@ class HeadingTextTile extends StatelessWidget {
               fontWeight: FontWeight.w400,
             ),
           ),
-        ),
+        ) : const SizedBox.shrink(),
       ],
     );
   }

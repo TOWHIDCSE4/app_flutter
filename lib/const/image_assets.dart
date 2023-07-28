@@ -5,6 +5,7 @@ class ImageAssets {
   static String get imgCard => 'card'.png;
   static String get imgFrontCard => 'front_card'.png;
   static String get imgCaptureImage => 'capture_image'.png;
+  static String get tickCircle => 'tick_circle'.png;
 
   //::::::::::::::::::::::::::::::: ICON ASSETS ::::::::::::::::::::::::::::::::
   static String get editIcon => 'edit_icon'.svg;
