@@ -7,12 +7,14 @@ import 'package:gohomy/components/dialog/dialog.dart';
 import 'package:gohomy/components/empty/saha_empty_avatar.dart';
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/const/image_assets.dart';
+import 'package:gohomy/const/test_const.dart';
 
 import 'package:gohomy/screen/admin/admin_screen.dart';
 import 'package:gohomy/screen/admin/notification_admin/notification_screen.dart';
 
 import 'package:gohomy/screen/data_app_controller.dart';
 import 'package:gohomy/screen/profile/bill/bill_screen.dart';
+import 'package:gohomy/screen/profile/deposit_withdraw/deposit_withdraw_page.dart';
 import 'package:gohomy/screen/profile/favourite_post/favourite_post_screen.dart';
 import 'package:gohomy/screen/profile/profile_controller.dart';
 import 'package:gohomy/screen/profile/service_sell/product_user_screen/product_user_screen.dart';
@@ -71,6 +73,8 @@ import 'help_post/help_screen.dart';
 import 'problem/problem_screen.dart';
 import 'profile_details/profile_details_page.dart';
 import 'service_sell/cart/cart_screen.dart';
+import 'widgets/activated_button.dart';
+import 'widgets/summart_tile.dart';
 
 class ProfileLockScreen extends StatelessWidget {
   const ProfileLockScreen({Key? key}) : super(key: key);
@@ -1393,13 +1397,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             Positioned.fill(
-              top: 30,
+              top: 0,
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(
-                      height: 40,
+                      height: 20,
                     ),
                     GestureDetector(
                       onTap: () {
@@ -1518,41 +1522,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      // ElevatedButton(
-                                      //   onPressed: () => Get.to(() => const ProfileDetailsPage()),
-                                      //   style: ButtonStyle(
-                                      //     backgroundColor: MaterialStateProperty.all(Colors.white)
-                                      //   ),
-                                      //   child: const Text(
-                                      //     'Kích hoạt',
-                                      //     style: TextStyle(
-                                      //       fontSize: 14,
-                                      //       color: Color(0xFFF83232),
-                                      //     ),
-                                      //   ),
-                                      // ),
-                                      GestureDetector(
-                                        onTap: () => Get.to(() => const ProfileDetailsPage()),
-                                        child: Stack(
-                                          alignment: Alignment.center,
-                                          children: [
-                                            SvgPicture.asset(
-                                              ImageAssets.curvedButton,
-                                            ),
-                                            const Text(
-                                              'Kích hoạt',
-                                              style: TextStyle(
-                                                color: AppColor.primaryColor,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
+                                      !TestConst.isEnableDepositWithdraw
+                                          ? SummaryTile(
+                                            goldCoinText: '100.000 Xu vàng',
+                                            silverCoinText: '100.000 Xu vàng',
+                                            onTap: () => Get.to(() => const DepositWithdrawPage()),
+                                          )
+                                          : ActivedButton(
+                                            title: 'Kích hoạt',
+                                            onTap: () => Get.to(() => const ProfileDetailsPage()),
+                                          ),
+                                      // const SizedBox(height: 10),
                                     ],
                                   ),
                                 ),
@@ -1583,7 +1563,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 50,
                     ),
                     Container(
                       width: Get.width,
@@ -2111,9 +2091,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         height: 10,
                                       ),
                                       ViewProfileBTN(
-                                    
-                              
-                                      
                                         text: "Kích hoạt",
                                         onPressed: () {
                                           Get.to(const RegistrationScreen());

@@ -9,6 +9,8 @@ class AppColor {
   static const Color primaryColor = Color(0xFFFB3E15);
   static const Color divider = Color(0xFFBFBFBF);
   
+  static const Color backgroundColor = Color(0xFFF4F6F6);
+  
   static const Color dark0 = Color(0xFF1A1A1A);
   static const Color dark1 = Color(0xFF212121);
   static const Color dark2 = Color(0xFF333333);

@@ -7,6 +7,14 @@ class ImageAssets {
   static String get imgBackCard => 'back_card'.png;
   static String get imgCaptureImage => 'capture_image'.png;
   static String get tickCircle => 'tick_circle'.png;
+  static String get renren => 'renren'.png;
+  static String get goldCoin => 'gold_coin'.png;
+  static String get silverCoin => 'silver_coin'.png;
+  static String get imgRobot1 => 'img_robot1'.png;
+  static String get imgRobot2 => 'img_robot2'.png;
+  static String get imgSummary => 'img_summary'.png;
+  static String get imgDeposit => 'deposit'.png;
+  static String get imgWithdraw => 'withdraw'.png;
 
   //::::::::::::::::::::::::::::::: ICON ASSETS ::::::::::::::::::::::::::::::::
   static String get editIcon => 'edit_icon'.svg;
