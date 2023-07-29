@@ -1397,13 +1397,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             Positioned.fill(
-              top: 0,
+              top: !TestConst.isEnableDepositWithdraw ? 20: 30,
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(
-                      height: 20,
+                      height: !TestConst.isEnableDepositWithdraw ? 0 : 40,
                     ),
                     GestureDetector(
                       onTap: () {

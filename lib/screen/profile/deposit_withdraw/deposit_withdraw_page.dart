@@ -37,7 +37,7 @@ class DepositWithdrawPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Image.asset(ImageAssets.imgRobot1),
-                          Image.asset(ImageAssets.imgRobot1),
+                          Image.asset(ImageAssets.imgRobot2),
                         ],
                       ),
                     )
