@@ -1445,7 +1445,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(!TestConst.isEnableDepositWithdraw ? 0 : 10),
                       child: Row(
                         children: [
                           ClipRRect(
