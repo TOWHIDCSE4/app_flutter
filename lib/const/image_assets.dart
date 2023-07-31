@@ -12,9 +12,11 @@ class ImageAssets {
   static String get silverCoin => 'silver_coin'.png;
   static String get imgRobot1 => 'img_robot1'.png;
   static String get imgRobot2 => 'img_robot2'.png;
-  static String get imgSummary => 'img_summary'.png;
+  // static String get imgSummary => 'img_summary'.png;
+  static String get imgBanner => 'img_banner'.png;
   static String get imgDeposit => 'deposit'.png;
   static String get imgWithdraw => 'withdraw'.png;
+  static String get logoBee => 'logo_bee'.png;
 
   //::::::::::::::::::::::::::::::: ICON ASSETS ::::::::::::::::::::::::::::::::
   static String get editIcon => 'edit_icon'.svg;

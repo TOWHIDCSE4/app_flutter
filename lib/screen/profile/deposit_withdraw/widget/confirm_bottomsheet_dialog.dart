@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/screen/profile/profile_details/widget/custom_button.dart';
+
+import '../deposit_success_page.dart';
+import 'deposit_text_tile.dart';
 
 class ConfirmBottomSheetDialog extends StatelessWidget {
   const ConfirmBottomSheetDialog({
@@ -60,6 +64,7 @@ class ConfirmBottomSheetDialog extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(width: 20),
               Container(
                 height: 28,
                 width: 91,
@@ -154,63 +159,30 @@ class ConfirmBottomSheetDialog extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          const Text(
-            'Mã tài khoản',
-            style: TextStyle(
-              color: AppColor.dark1,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
+          const DepositTextTile(
+            title: 'Mã tài khoản',
+            value: '0396654452',
+            valueFontSize: 14,
           ),
-          const Text(
-            '0396654452',
-            style: TextStyle(
-              color: AppColor.dark1,
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
+          const DepositTextTile(
+            title: 'Số tiền nạp',
+            value: '1.000.000',
+            valueFontSize: 14,
+            valueColor: AppColor.primaryColor,
           ),
-          const SizedBox(height: 16),
-          const Text(
-            'Số tiền nạp',
-            style: TextStyle(
-              color: AppColor.dark1,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
+          const DepositTextTile(
+            title: 'Mã giao dịch',
+            value: 'F12949FJFKFNYY',
+            valueFontSize: 14,
           ),
-          const Text(
-            '1.000.000',
-            style: TextStyle(
-              color: AppColor.primaryColor,
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'Mã giao dịch',
-            style: TextStyle(
-              color: AppColor.dark1,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          const Text(
-            'F12949FJFKFNYY',
-            style: TextStyle(
-              color: AppColor.dark1,
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 16),
           CustomButton(
             title: 'Thanh toán',
             radius: 4,
             height: 48,
             bgColor: AppColor.primaryColor,
-            onTap: () {},
+            onTap: () {
+              Get.to(const DepositSuccessPage());
+            },
           ),
           const SizedBox(height: 16),
         ],

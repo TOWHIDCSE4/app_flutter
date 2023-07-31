@@ -104,18 +104,20 @@ class _DepositEntryPageState extends State<DepositEntryPage> {
                   height: 48,
                   bgColor: isTyping ? AppColor.primaryColor : AppColor.light3,
                   onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(25.0),
+                    if (isTyping) {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(25.0),
+                          ),
                         ),
-                      ),
-                      builder: (context) {
-                        return const ConfirmBottomSheetDialog();
-                      },
-                    );
+                        builder: (context) {
+                          return const ConfirmBottomSheetDialog();
+                        },
+                      );
+                    }
                   },
                 ),
               )
