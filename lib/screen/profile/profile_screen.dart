@@ -5,17 +5,18 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:gohomy/components/dialog/dialog.dart';
 import 'package:gohomy/components/empty/saha_empty_avatar.dart';
-
+import 'package:gohomy/const/test_const.dart';
 import 'package:gohomy/screen/admin/admin_screen.dart';
 import 'package:gohomy/screen/admin/notification_admin/notification_screen.dart';
-
 import 'package:gohomy/screen/data_app_controller.dart';
 import 'package:gohomy/screen/profile/bill/bill_screen.dart';
+import 'package:gohomy/screen/profile/deposit_withdraw/deposit_withdraw_page.dart';
 import 'package:gohomy/screen/profile/favourite_post/favourite_post_screen.dart';
 import 'package:gohomy/screen/profile/profile_controller.dart';
 import 'package:gohomy/screen/profile/service_sell/product_user_screen/product_user_screen.dart';
+import 'package:gohomy/screen/profile/wallet_admin_review/wallet_admin_manager_review_history.dart';
 import 'package:gohomy/screen/users_bill/user_bill_screen.dart';
-import '../../components/button/saha_button.dart';
+
 import '../../components/check/check_login_widget.dart';
 import '../../components/empty/saha_empty_image.dart';
 import '../../components/loading/loading_widget.dart';
@@ -30,18 +31,15 @@ import '../admin/contact/admin_contact_screen.dart';
 import '../admin/contract/contract_admin_screen.dart';
 import '../admin/decentralization_admin/decentralization_manage_screen.dart';
 import '../admin/find_fast_motel/find_fast_motel_screen.dart';
-import '../admin/motel_room_admin/admin_motel_room_screen.dart';
 import '../admin/motel_room_admin/admin_motel_screen.dart';
 import '../admin/motel_room_admin/tower/tower_screen.dart';
 import '../admin/post/post_admin_screen.dart';
-import '../admin/post/post_screen.dart';
 import '../admin/potential_user/potential_user_screen.dart';
 import '../admin/problem/problem_admin_screen.dart';
 import '../admin/referral_manage_screen.dart';
 import '../admin/renter_manage_admin/renter_manage_admin_screen.dart';
 import '../admin/report_screen.dart';
 import '../admin/service_sell/orders/orders_admin_screen.dart';
-import '../admin/service_sell/service_sell_screen.dart';
 import '../admin/services_sell/services_sell_screen.dart';
 import '../admin/support/support_screen.dart';
 import '../admin/ui_mangage/ui_manage_screen.dart';
@@ -50,7 +48,6 @@ import '../home/home_controller.dart';
 import '../owner/commission/commission_manage_screen.dart';
 import '../owner/contract/contract_screen.dart';
 import '../owner/customer_home_screen.dart';
-
 import '../owner/motel_manager/tower_manager_screen.dart';
 import '../owner/motel_room/list_motel_room_screen.dart';
 import '../owner/motel_room/motel_room_manage_screen.dart';
@@ -60,24 +57,28 @@ import '../owner/renters/renter_screen.dart';
 import '../owner/report/report_screen.dart';
 import '../owner/reservation_motel/reservation_motel_host_screen.dart';
 import '../owner/service/service_screen.dart';
-import '../wallet_register/register_screen.dart';
 import 'contract/contract_user_screen.dart';
 import 'customer_post/customer_post_screen.dart';
 import 'e_wallet_histories/e_wallet_histories_screen.dart';
 import 'edit_profile/edit_profile_screen.dart';
 import 'help_post/help_screen.dart';
 import 'problem/problem_screen.dart';
+import 'profile_details/profile_details_page.dart';
 import 'service_sell/cart/cart_screen.dart';
+import 'widgets/activated_button.dart';
+import 'widgets/summart_tile.dart';
 
 class ProfileLockScreen extends StatelessWidget {
   const ProfileLockScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return CheckCustomerLogin(child: ProfileScreen());
+    return CheckCustomerLogin(child: const ProfileScreen());
   }
 }
 
 class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -99,12 +100,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
 
       if (dataAppController.badge.value.user?.isHost == true) {
-        return hostProfile();
+        // return hostProfile();
+        return usersProfile();
+        // return adminProfile();
       }
 
       if (dataAppController.badge.value.user?.isHost == false ||
           dataAppController.badge.value.user?.isHost == null) {
-        return usersProfile();
+        // return usersProfile();
+        return adminProfile();
       }
 
       return Container();
@@ -593,11 +597,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Get.to(() => ConfigUserScreen());
                       },
                       child: Container(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                             top: 3, bottom: 3, right: 10, left: 10),
-                        margin: EdgeInsets.only(
+                        margin: const EdgeInsets.only(
                             top: 10, bottom: 10, right: 10, left: 0),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(30),
@@ -613,7 +617,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   color: Theme.of(context).primaryColor,
                                   fontSize: 15),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             SvgPicture.asset(
@@ -692,6 +696,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
+                                      // !TestConst.isEnableDepositWithdraw
+                                      //     ?
+                                      SummaryTile(
+                                        goldCoinText: '100.000 Xu vàng',
+                                        silverCoinText: '100.000 Xu vàng',
+                                        onTap: () => Get.to(() =>
+                                            WalletAdminManagerReviewHistory()),
+                                      ),
+                                      // : ActivedButton(
+                                      //     title: 'Kích hoạt',
+                                      //     onTap: () => Get.to(() =>
+                                      //         const ProfileDetailsPage()),
+                                      //   ),
                                       const SizedBox(
                                         height: 10,
                                       ),
@@ -889,7 +906,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   name: 'Quản lý phòng trọ',
                                   icon: "assets/icon_host/quan-ly-phong.png",
                                   onTap: () {
-                                    Get.to(() => AdminMotelScreen());
+                                    Get.to(() => const AdminMotelScreen());
                                   }),
                             ),
                           ),
@@ -1390,24 +1407,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             Positioned.fill(
-              top: 30,
+              top: !TestConst.isEnableDepositWithdraw ? 20 : 30,
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(
-                      height: 40,
+                      height: !TestConst.isEnableDepositWithdraw ? 0 : 40,
                     ),
                     GestureDetector(
                       onTap: () {
                         Get.to(() => ConfigUserScreen());
                       },
                       child: Container(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                             top: 3, bottom: 3, right: 10, left: 10),
-                        margin: EdgeInsets.only(
+                        margin: const EdgeInsets.only(
                             top: 10, bottom: 10, right: 10, left: 0),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(30),
@@ -1424,7 +1441,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   color: Theme.of(context).primaryColor,
                                   fontSize: 15),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             SvgPicture.asset(
@@ -1515,9 +1532,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
+                                      !TestConst.isEnableDepositWithdraw
+                                          ? SummaryTile(
+                                              goldCoinText: '100.000 Xu vàng',
+                                              silverCoinText: '100.000 Xu vàng',
+                                              onTap: () => Get.to(() =>
+                                                  const DepositWithdrawPage()),
+                                            )
+                                          : ActivedButton(
+                                              title: 'Kích hoạt',
+                                              onTap: () => Get.to(() =>
+                                                  const ProfileDetailsPage()),
+                                            ),
+                                      // const SizedBox(height: 10),
                                     ],
                                   ),
                                 ),
@@ -1548,7 +1575,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: !TestConst.isEnableDepositWithdraw ? 0 : 10,
                     ),
                     Container(
                       width: Get.width,
@@ -1740,7 +1767,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               name: 'Quản lý phòng trọ',
                               icon: "assets/icon_host/quan-ly-phong.png",
                               onTap: () {
-                                Get.to(() => MotelRoomManageScreen());
+                                Get.to(() => const MotelRoomManageScreen());
                               }),
                           optionProfile(
                               name: 'Quản lý bài đăng',
@@ -1981,11 +2008,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Get.to(() => ConfigUserScreen());
                       },
                       child: Container(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                             top: 3, bottom: 3, right: 10, left: 10),
-                        margin: EdgeInsets.only(
+                        margin: const EdgeInsets.only(
                             top: 10, bottom: 10, right: 10, left: 0),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(30),
@@ -2001,7 +2028,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   color: Theme.of(context).primaryColor,
                                   fontSize: 15),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             SvgPicture.asset(
@@ -2072,17 +2099,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
+                                      // !TestConst.isEnableDepositWithdraw
+                                      //     ? SummaryTile(
+                                      //         goldCoinText: '100.000 Xu vàng',
+                                      //         silverCoinText: '100.000 Xu vàng',
+                                      //         onTap: () => Get.to(() =>
+                                      //             const DepositWithdrawPage()),
+                                      //       )
+                                      //     :
+                                      ActivedButton(
+                                        title: 'Kích hoạt',
+                                        onTap: () => Get.to(
+                                            () => const ProfileDetailsPage()),
+                                      ),
                                       const SizedBox(
                                         height: 10,
-                                      ),
-                                      ViewProfileBTN(
-                                    
-                              
-                                      
-                                        text: "Kích hoạt",
-                                        onPressed: () {
-                                          Get.to(const RegistrationScreen());
-                                        },
                                       ),
                                     ],
                                   ),
@@ -2229,7 +2260,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 name: 'Quản lý bài đăng',
                                 icon: "assets/icon_host/quan-ly-phong.png",
                                 onTap: () {
-                                  Get.to(() => CustomerPostScreen());
+                                  Get.to(() => const CustomerPostScreen());
                                 }),
                             if (dataAppController
                                     .currentUser.value.accountRank ==
