@@ -27,6 +27,7 @@ class WalletHistoryDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      insetPadding: const EdgeInsets.all(15),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -37,159 +38,6 @@ class WalletHistoryDialog extends StatelessWidget {
           fontFamily: 'Inter',
           fontWeight: FontWeight.w600,
         ),
-      ),
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Center(
-            child: Text(
-              amountStr,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color(isDeposit ? 0xFF009247 : 0xFFF73131),
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          const SizedBox(height: 15),
-          Wrap(
-            children: [
-              Text.rich(
-                TextSpan(
-                  children: [
-                    const TextSpan(
-                      text: 'Tài khoản nhận: ',
-                      style: TextStyle(
-                        color: Color(0xFF3F3F3F),
-                        fontSize: 14,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    TextSpan(
-                      text: recipientAccount,
-                      style: const TextStyle(
-                        color: Color(0xFF3F3F3F),
-                        fontSize: 14,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(width: 15),
-              if (!completed)
-                Align(
-                  alignment: Alignment.topRight,
-                  child: TextButton.icon(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFEFF3F5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                    ),
-                    icon: const Icon(
-                      Icons.copy,
-                      color: Color(0xFF8B999E),
-                    ),
-                    label: const Text(
-                      'Sao chép',
-                      style: TextStyle(
-                        color: Color(0xFF8B999E),
-                        fontFamily: 'SF Pro',
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                )
-            ],
-          ),
-          Text(
-            'Ngân hàng: $nameOfBank',
-            style: const TextStyle(
-              color: Color(0xFF3F3F3F),
-              fontSize: 14,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 15),
-          Text(
-            'Chủ tài khoản: $accountOwner',
-            style: const TextStyle(
-              color: Color(0xFF3F3F3F),
-              fontSize: 14,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 15),
-          Wrap(
-            children: [
-              Text(
-                'ND: $content',
-                style: const TextStyle(
-                  color: Color(0xFF3F3F3F),
-                  fontSize: 14,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(width: 15),
-              if (!completed)
-                Align(
-                  alignment: Alignment.topRight,
-                  child: TextButton.icon(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFEFF3F5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                    ),
-                    icon: const Icon(
-                      Icons.copy,
-                      color: Color(0xFF8B999E),
-                    ),
-                    label: const Text(
-                      'Sao chép',
-                      style: TextStyle(
-                        color: Color(0xFF8B999E),
-                        fontFamily: 'SF Pro',
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                )
-            ],
-          ),
-          const SizedBox(height: 15),
-          Text(
-            'Thời gian tạo lệnh rút: $creationTime',
-            style: const TextStyle(
-              color: Color(0xFF3F3F3F),
-              fontSize: 14,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 15),
-          if (completed)
-            Text(
-              'Thời gian thanh toán: $paymentTime',
-              style: const TextStyle(
-                color: Color(0xFF3F3F3F),
-                fontSize: 14,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-        ],
       ),
       actionsAlignment: MainAxisAlignment.center,
       actionsPadding: const EdgeInsets.only(bottom: 10, top: 0),
@@ -205,13 +53,133 @@ class WalletHistoryDialog extends StatelessWidget {
           child: const Text(
             'Thanh toán',
             style: TextStyle(
-              // fontSize: 20,
               fontFamily: 'Inter',
               fontWeight: FontWeight.w600,
             ),
           ),
         )
       ],
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Center(
+              child: Text(
+                amountStr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Color(isDeposit ? 0xFF009247 : 0xFFF73131),
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            const SizedBox(height: 15),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ContentText(title: 'Tài khoản nhận', content: recipientAccount),
+                if (!completed) CopyButton(onPressed: () {})
+              ],
+            ),
+            if (completed) const SizedBox(height: 15),
+            if (nameOfBank.isNotEmpty) ...[
+              ContentText(title: 'Ngân hàng', content: nameOfBank),
+              const SizedBox(height: 15),
+            ],
+            ContentText(title: 'Chủ tài khoản', content: accountOwner),
+            if (completed) const SizedBox(height: 15),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ContentText(title: 'ND', content: content),
+                if (!completed) CopyButton(onPressed: () {})
+              ],
+            ),
+            if (completed) const SizedBox(height: 15),
+            ContentText(title: 'Thời gian tạo lệnh rút', content: creationTime),
+            if (completed) ...[
+              const SizedBox(height: 15),
+              ContentText(title: 'Thời gian thanh toán', content: paymentTime),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CopyButton extends StatelessWidget {
+  const CopyButton({super.key, required this.onPressed});
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton.icon(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFFEFF3F5),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(6),
+        ),
+      ),
+      icon: const Icon(
+        Icons.copy,
+        size: 17.5,
+        color: Color(0xFF8B999E),
+      ),
+      label: const Text(
+        'Sao chép',
+        textScaleFactor: 1,
+        style: TextStyle(
+          color: Color(0xFF8B999E),
+          fontFamily: 'SF Pro',
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+}
+
+class ContentText extends StatelessWidget {
+  const ContentText({
+    super.key,
+    required this.title,
+    required this.content,
+  });
+
+  final String title;
+  final String content;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text.rich(
+      textAlign: TextAlign.center,
+      TextSpan(
+        children: [
+          TextSpan(
+            text: '$title: ',
+            style: const TextStyle(
+              color: Color(0xFF3F3F3F),
+              fontSize: 16,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          TextSpan(
+            text: content,
+            style: const TextStyle(
+              color: Color(0xFF3F3F3F),
+              fontSize: 16,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
