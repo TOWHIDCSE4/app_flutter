@@ -47,7 +47,7 @@ class WalletHistoryCard extends StatelessWidget {
             contentPadding: const EdgeInsets.symmetric(horizontal: 20),
             onTap: () => showDialog(
               context: context,
-              barrierDismissible: false,
+              barrierDismissible: true,
               builder: (context) => WalletHistoryDialog(
                   isDeposit: isDeposit,
                   completed: completed,
