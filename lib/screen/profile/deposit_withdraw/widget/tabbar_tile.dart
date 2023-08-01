@@ -7,7 +7,10 @@ import 'withdraw_history_tile.dart';
 class TabbarTile extends StatelessWidget {
   const TabbarTile({
     super.key,
+    this.initialIndex = 0,
   });
+
+  final int initialIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +39,7 @@ class TabbarTile extends StatelessWidget {
             Expanded(
               child: DefaultTabController(
                 length: 2,
+                initialIndex: initialIndex,
                 child: Scaffold(
                   appBar: PreferredSize(
                     preferredSize: const Size.fromHeight(30),

@@ -8,7 +8,11 @@ import 'widget/tabbar_tile.dart';
 import 'widget/transaction_entry_navigation_tile.dart';
 
 class DepositWithdrawPage extends StatelessWidget {
-  const DepositWithdrawPage({super.key});
+  const DepositWithdrawPage({
+    super.key,
+    this.initialIndex = 0,
+  });
+  final int initialIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,9 @@ class DepositWithdrawPage extends StatelessWidget {
                   onTapWithdraw: () {},
                 ),
                 const SizedBox(height: 16),
-                const TabbarTile()
+                TabbarTile(
+                  initialIndex: initialIndex,
+                )
               ],
             ),
           ),

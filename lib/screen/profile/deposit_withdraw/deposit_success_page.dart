@@ -5,6 +5,7 @@ import 'package:gohomy/const/image_assets.dart';
 import 'package:gohomy/screen/navigator/navigator_screen.dart';
 import 'package:gohomy/screen/profile/profile_details/widget/custom_button.dart';
 
+import 'deposit_withdraw_page.dart';
 import 'widget/deposit_text_tile.dart';
 
 class DepositSuccessPage extends StatelessWidget {
@@ -72,12 +73,17 @@ class DepositSuccessPage extends StatelessWidget {
                 const Spacer(),
                 CustomButton(
                   title: 'Hoàn thành',
-                  onTap: () {
-                    Get.offAll(
-                      () => NavigatorApp(
-                        selectedIndex: 3,
-                      ),
-                    );
+                  onTap: () async {
+                    await Future.delayed(Duration.zero, () {
+                      Get.offAll(
+                        () => NavigatorApp(
+                          selectedIndex: 3,
+                        ),
+                      );
+                    });
+                    await Future.delayed(Duration.zero, () {
+                      Get.to(const DepositWithdrawPage());
+                    });
                   },
                 ),
                 const SizedBox(height: 20),
