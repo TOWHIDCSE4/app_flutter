@@ -5,8 +5,8 @@ import 'package:gohomy/const/image_assets.dart';
 import 'package:gohomy/screen/navigator/navigator_screen.dart';
 import 'package:gohomy/screen/profile/profile_details/widget/custom_button.dart';
 
-import 'deposit_withdraw_page.dart';
-import 'widget/deposit_text_tile.dart';
+import '../deposit_withdraw_page.dart';
+import 'widgets/deposit_text_tile.dart';
 
 class DepositSuccessPage extends StatelessWidget {
   const DepositSuccessPage({super.key});

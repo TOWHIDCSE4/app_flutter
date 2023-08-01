@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gohomy/const/color.dart';
-import 'package:gohomy/screen/profile/deposit_withdraw/deposit_entry_page.dart';
+import 'package:gohomy/screen/profile/deposit_withdraw/deposit/deposit_entry_page.dart';
 
 import 'widget/banner_tile.dart';
 import 'widget/tabbar_tile.dart';

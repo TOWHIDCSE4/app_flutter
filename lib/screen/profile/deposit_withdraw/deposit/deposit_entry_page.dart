@@ -4,8 +4,8 @@ import 'package:gohomy/const/color.dart';
 import 'package:gohomy/const/image_assets.dart';
 import 'package:gohomy/screen/profile/profile_details/widget/custom_button.dart';
 
-import 'widget/confirm_bottomsheet_dialog.dart';
-import 'widget/custom_entry_textfield.dart';
+import 'widgets/confirm_bottomsheet_dialog.dart';
+import '../widget/custom_entry_textfield.dart';
 
 class DepositEntryPage extends StatefulWidget {
   const DepositEntryPage({super.key});
