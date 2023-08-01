@@ -11,7 +11,7 @@ class SummaryTile extends StatelessWidget {
 
   final String silverCoinText;
   final String goldCoinText;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:gohomy/components/dialog/dialog.dart';
 import 'package:gohomy/components/empty/saha_empty_avatar.dart';
+import 'package:gohomy/const/image_assets.dart';
 import 'package:gohomy/const/test_const.dart';
 import 'package:gohomy/screen/admin/admin_screen.dart';
 import 'package:gohomy/screen/admin/notification_admin/notification_screen.dart';
@@ -14,7 +15,7 @@ import 'package:gohomy/screen/profile/deposit_withdraw/deposit_withdraw_page.dar
 import 'package:gohomy/screen/profile/favourite_post/favourite_post_screen.dart';
 import 'package:gohomy/screen/profile/profile_controller.dart';
 import 'package:gohomy/screen/profile/service_sell/product_user_screen/product_user_screen.dart';
-import 'package:gohomy/screen/profile/wallet_admin_review/wallet_admin_manager_review_history.dart';
+import 'package:gohomy/screen/profile/wallet_admin_review/wallet_admin_review.dart';
 import 'package:gohomy/screen/users_bill/user_bill_screen.dart';
 
 import '../../components/check/check_login_widget.dart';
@@ -698,11 +699,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                       // !TestConst.isEnableDepositWithdraw
                                       //     ?
-                                      SummaryTile(
+                                      const SummaryTile(
                                         goldCoinText: '100.000 Xu vàng',
                                         silverCoinText: '100.000 Xu vàng',
-                                        onTap: () => Get.to(() =>
-                                            WalletAdminManagerReviewHistory()),
+                                        onTap: null,
                                       ),
                                       // : ActivedButton(
                                       //     title: 'Kích hoạt',
@@ -893,6 +893,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       child: Column(
                         children: [
+                          Obx(
+                            () => DecentralizationWidget(
+                              decent: dataAppController
+                                          .badge.value.user?.decentralization ==
+                                      null
+                                  ? true
+                                  : dataAppController.badge.value.user
+                                          ?.decentralization?.manageMotel ??
+                                      false,
+                              child: optionProfile(
+                                  name: 'Quản lý ví Renren',
+                                  icon: ImageAssets.renren,
+                                  onTap: () {
+                                    Get.to(() =>
+                                        WalletAdminManagerReviewHistory());
+                                  }),
+                            ),
+                          ),
                           Obx(
                             () => DecentralizationWidget(
                               decent: dataAppController

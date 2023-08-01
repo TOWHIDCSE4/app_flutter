@@ -40,11 +40,12 @@ class WalletHistoryDialog extends StatelessWidget {
         ),
       ),
       actionsAlignment: MainAxisAlignment.center,
-      actionsPadding: const EdgeInsets.only(bottom: 10, top: 0),
+      actionsPadding: const EdgeInsets.only(bottom: 20, top: 10),
       contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       actions: [
         ElevatedButton(
           style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 12.5, horizontal: 40),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -52,6 +53,7 @@ class WalletHistoryDialog extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
           child: const Text(
             'Thanh toán',
+            textScaleFactor: 1.25,
             style: TextStyle(
               fontFamily: 'Inter',
               fontWeight: FontWeight.w600,
@@ -69,6 +71,7 @@ class WalletHistoryDialog extends StatelessWidget {
               child: Text(
                 amountStr,
                 textAlign: TextAlign.center,
+                textScaleFactor: 1.5,
                 style: TextStyle(
                   color: Color(isDeposit ? 0xFF009247 : 0xFFF73131),
                   fontFamily: 'Inter',
