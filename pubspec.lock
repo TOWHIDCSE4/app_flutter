@@ -473,6 +473,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  fl_chart:
+    dependency: "direct main"
+    description:
+      name: fl_chart
+      sha256: "707635d33ec762c0030bad59c47a16dfee4f5b0f35458c82d6549e46f2190b7b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.40.0"
   flash:
     dependency: "direct main"
     description:
