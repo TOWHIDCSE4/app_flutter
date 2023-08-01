@@ -51,10 +51,10 @@ class WalletHistoryDialog extends StatelessWidget {
             ),
           ),
           onPressed: () => Navigator.pop(context),
-          child: const Text(
-            'Thanh toán',
+          child: Text(
+            completed ? 'Đóng' : 'Thanh toán',
             textScaleFactor: 1.25,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Inter',
               fontWeight: FontWeight.w600,
             ),
