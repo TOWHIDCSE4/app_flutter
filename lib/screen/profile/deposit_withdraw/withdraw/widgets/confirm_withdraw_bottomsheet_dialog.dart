@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/screen/profile/profile_details/widget/custom_button.dart';
 
-import 'withdraw_otp_page.dart';
+import '../withdraw_otp_page.dart';
 import 'withdraw_text_tile.dart';
 
 class ConfirmWithdrawBottomSheetDialog extends StatelessWidget {
@@ -102,7 +102,7 @@ class ConfirmWithdrawBottomSheetDialog extends StatelessWidget {
             radius: 4,
             height: 48,
             bgColor: AppColor.primaryColor,
-            onTap: () => Get.to(const WithdrawEntryPage()),
+            onTap: () => Get.to(const WithdrawOTPEntryPage()),
           ),
           const SizedBox(height: 16),
         ],

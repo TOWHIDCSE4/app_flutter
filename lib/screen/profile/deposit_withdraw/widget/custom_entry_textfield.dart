@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/const/image_assets.dart';
 import 'package:gohomy/screen/profile/deposit_withdraw/widget/tranaction_type.dart';
@@ -23,7 +24,11 @@ class CustomEntryTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      autofocus: true,
       keyboardType: TextInputType.number,
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,1}')),
+      ],
       textAlign: isTyping ? TextAlign.start : TextAlign.center,
       style: const TextStyle(
         color: AppColor.primaryColor,

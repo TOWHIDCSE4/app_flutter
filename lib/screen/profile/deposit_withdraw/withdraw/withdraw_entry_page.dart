@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gohomy/const/color.dart';
-import 'package:gohomy/const/image_assets.dart';
 import 'package:gohomy/screen/profile/profile_details/widget/custom_button.dart';
 
 import '../widget/custom_entry_textfield.dart';
 import '../widget/tranaction_type.dart';
-import 'choose_choose_page.dart';
+import 'choose_bank_page.dart';
 
 class WithdrawEntryPage extends StatefulWidget {
   const WithdrawEntryPage({super.key});

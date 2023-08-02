@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/const/image_assets.dart';
 
+import 'add_bank_account_page.dart';
 import 'edit_bank_page.dart';
 import 'widgets/bank_info_card_tile.dart';
 import 'widgets/confirm_withdraw_bottomsheet_dialog.dart';
@@ -34,7 +35,7 @@ class ChooseBankPage extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () => Get.to(const AddBankAccountPage()),
                   icon: const Icon(
                     Icons.add,
                     size: 32,
