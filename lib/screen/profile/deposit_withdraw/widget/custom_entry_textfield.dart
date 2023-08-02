@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/const/image_assets.dart';
+import 'package:gohomy/screen/profile/deposit_withdraw/widget/tranaction_type.dart';
 
 class CustomEntryTextField extends StatelessWidget {
   const CustomEntryTextField({
     super.key,
     required this.controller,
     this.isTyping = false,
+    this.hintText = 'Tối thiểu 50.000',
+    this.transactionType = TransactionType.deposit,
     this.onChanged,
   });
 
   final TextEditingController controller;
   final bool isTyping;
+  final String hintText;
+  final TransactionType transactionType;
   final Function(String)? onChanged;
 
   @override
@@ -34,15 +39,25 @@ class CustomEntryTextField extends StatelessWidget {
                 width: 20,
               )
             : null,
-        enabledBorder: const OutlineInputBorder(
+        enabledBorder: transactionType == TransactionType.deposit ? const OutlineInputBorder(
           borderSide: BorderSide(color: AppColor.dark5),
+        ) : const UnderlineInputBorder(
+          borderSide: BorderSide(
+            width: 1,
+            color: AppColor.light3
+          )
         ),
-        focusedBorder: const OutlineInputBorder(
+        focusedBorder: transactionType == TransactionType.deposit ? const OutlineInputBorder(
           borderSide: BorderSide(
             color: AppColor.dark5,
           ),
+        ) : const UnderlineInputBorder(
+          borderSide: BorderSide(
+            width: 1,
+            color: AppColor.light3
+          )
         ),
-        hintText: 'Tối thiểu 50.000',
+        hintText: hintText,
         hintStyle: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w400,

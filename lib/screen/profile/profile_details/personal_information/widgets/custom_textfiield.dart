@@ -7,17 +7,19 @@ class CustomTextFiled extends StatelessWidget {
     required this.textEditingController,
     this.hintText = '',
     this.backgroungColor = Colors.white,
+    this.keyboardType = TextInputType.text,
   });
 
   final TextEditingController textEditingController;
   final String hintText;
   final Color backgroungColor;
+  final TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: textEditingController,
-      keyboardType: TextInputType.text,
+      keyboardType: keyboardType,
       decoration: InputDecoration(
         filled: true,
         border: InputBorder.none,
@@ -38,7 +40,10 @@ class CustomTextFiled extends StatelessWidget {
           ),
         ),
         hintText: hintText,
-        hintStyle: const TextStyle(color: AppColor.dark5, fontSize: 14),
+        hintStyle: const TextStyle(
+          color: AppColor.dark5,
+          fontSize: 14,
+        ),
       ),
       onChanged: (str) {},
       onSubmitted: (str) {},

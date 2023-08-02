@@ -6,6 +6,7 @@ import 'package:gohomy/screen/profile/deposit_withdraw/deposit/deposit_entry_pag
 import 'widget/banner_tile.dart';
 import 'widget/tabbar_tile.dart';
 import 'widget/transaction_entry_navigation_tile.dart';
+import 'withdraw/withdraw_entry_page.dart';
 
 class DepositWithdrawPage extends StatelessWidget {
   const DepositWithdrawPage({
@@ -27,7 +28,7 @@ class DepositWithdrawPage extends StatelessWidget {
                 const BannerTile(),
                 TransactionEntryNavigationTile(
                   onTapDeposit: () => Get.to(const DepositEntryPage()),
-                  onTapWithdraw: () {},
+                  onTapWithdraw: () => Get.to(const WithdrawEntryPage()),
                 ),
                 const SizedBox(height: 16),
                 TabbarTile(

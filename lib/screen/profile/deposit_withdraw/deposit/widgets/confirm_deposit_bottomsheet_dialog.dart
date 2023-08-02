@@ -6,8 +6,8 @@ import 'package:gohomy/screen/profile/profile_details/widget/custom_button.dart'
 import '../deposit_success_page.dart';
 import 'deposit_text_tile.dart';
 
-class ConfirmBottomSheetDialog extends StatelessWidget {
-  const ConfirmBottomSheetDialog({
+class ConfirmDepositBottomSheetDialog extends StatelessWidget {
+  const ConfirmDepositBottomSheetDialog({
     super.key,
   });
 

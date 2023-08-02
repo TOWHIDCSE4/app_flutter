@@ -17,6 +17,7 @@ class ImageAssets {
   static String get imgDeposit => 'deposit'.png;
   static String get imgWithdraw => 'withdraw'.png;
   static String get logoBee => 'logo_bee'.png;
+  static String get icBank1 => 'ic_bank1'.png;
 
   //::::::::::::::::::::::::::::::: ICON ASSETS ::::::::::::::::::::::::::::::::
   static String get editIcon => 'edit_icon'.svg;

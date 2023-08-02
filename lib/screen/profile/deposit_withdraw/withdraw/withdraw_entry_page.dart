@@ -4,23 +4,24 @@ import 'package:gohomy/const/color.dart';
 import 'package:gohomy/const/image_assets.dart';
 import 'package:gohomy/screen/profile/profile_details/widget/custom_button.dart';
 
-import 'widgets/confirm_deposit_bottomsheet_dialog.dart';
 import '../widget/custom_entry_textfield.dart';
+import '../widget/tranaction_type.dart';
+import 'choose_choose_page.dart';
 
-class DepositEntryPage extends StatefulWidget {
-  const DepositEntryPage({super.key});
+class WithdrawEntryPage extends StatefulWidget {
+  const WithdrawEntryPage({super.key});
 
   @override
-  State<DepositEntryPage> createState() => _DepositEntryPageState();
+  State<WithdrawEntryPage> createState() => _WithdrawEntryPageState();
 }
 
-class _DepositEntryPageState extends State<DepositEntryPage> {
-  final depositController = TextEditingController();
+class _WithdrawEntryPageState extends State<WithdrawEntryPage> {
+  final withdrawController = TextEditingController();
   bool isTyping = false;
 
   @override
   void dispose() {
-    depositController.dispose();
+    withdrawController.dispose();
     super.dispose();
   }
 
@@ -37,7 +38,7 @@ class _DepositEntryPageState extends State<DepositEntryPage> {
           onPressed: Get.back,
         ),
         title: const Text(
-          'Nạp tiền',
+          'Rút tiền',
           style: TextStyle(color: Color(0xFF1A1A1A)),
         ),
         centerTitle: true,
@@ -52,18 +53,41 @@ class _DepositEntryPageState extends State<DepositEntryPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Nhập số tiền nạp',
-                    style: TextStyle(
-                      color: AppColor.dark2,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Nhập số tiền cần rút',
+                        style: TextStyle(
+                          color: AppColor.dark2,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            withdrawController.text = '25.000.000';
+                            isTyping = true;
+                          });
+                        },
+                        child: const Text(
+                          'Tất cả',
+                          style: TextStyle(
+                            color: AppColor.primaryColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 16),
                   CustomEntryTextField(
-                    controller: depositController,
+                    controller: withdrawController,
                     isTyping: isTyping,
+                    hintText: 'Tối thiểu 50.000',
+                    transactionType: TransactionType.withdraw,
                     onChanged: (text) {
                       setState(() {
                         isTyping = text.isNotEmpty;
@@ -73,20 +97,23 @@ class _DepositEntryPageState extends State<DepositEntryPage> {
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        '1.000 VNĐ = 1.000',
+                    children: const [
+                      Text(
+                        'Số dư khả dụng',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                           color: AppColor.dark5,
                         ),
                       ),
-                      const SizedBox(width: 4),
-                      Image.asset(
-                        ImageAssets.goldCoin,
-                        height: 14,
-                        width: 14,
+                      SizedBox(width: 4),
+                      Text(
+                        '25.000.000',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.dark4,
+                        ),
                       ),
                     ],
                   ),
@@ -103,22 +130,7 @@ class _DepositEntryPageState extends State<DepositEntryPage> {
                   radius: 4,
                   height: 48,
                   bgColor: isTyping ? AppColor.primaryColor : AppColor.light3,
-                  onTap: () {
-                    if (isTyping) {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(25.0),
-                          ),
-                        ),
-                        builder: (context) {
-                          return const ConfirmDepositBottomSheetDialog();
-                        },
-                      );
-                    }
-                  },
+                  onTap: () => Get.to(const ChooseBankPage()),
                 ),
               )
             : null,
