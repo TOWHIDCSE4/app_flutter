@@ -10,11 +10,9 @@ class WalletHistoryDialog extends StatelessWidget {
     required this.content,
     required this.creationTime,
     required this.paymentTime,
-    this.isDeposit = true,
     this.completed = false,
   });
 
-  final bool isDeposit;
   final bool completed;
   final String amountStr;
   final String recipientAccount;
@@ -72,8 +70,8 @@ class WalletHistoryDialog extends StatelessWidget {
                 amountStr,
                 textAlign: TextAlign.center,
                 textScaleFactor: 1.5,
-                style: TextStyle(
-                  color: Color(isDeposit ? 0xFF009247 : 0xFFF73131),
+                style: const TextStyle(
+                  color: Color(0xFFF73131),
                   fontFamily: 'Inter',
                   fontWeight: FontWeight.w500,
                 ),

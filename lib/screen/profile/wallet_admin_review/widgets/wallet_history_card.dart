@@ -45,20 +45,21 @@ class WalletHistoryCard extends StatelessWidget {
         children: [
           ListTile(
             contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-            onTap: () => showDialog(
-              context: context,
-              barrierDismissible: true,
-              builder: (context) => WalletHistoryDialog(
-                  isDeposit: isDeposit,
-                  completed: completed,
-                  amountStr: amountStr_,
-                  recipientAccount: fromOrTo,
-                  nameOfBank: bankName ?? '',
-                  accountOwner: 'VŨ ANH TÙNG,',
-                  content: content,
-                  creationTime: dateTimeStr,
-                  paymentTime: '20:00 05/07/2023'),
-            ),
+            onTap: isDeposit
+                ? null
+                : () => showDialog(
+                      context: context,
+                      barrierDismissible: true,
+                      builder: (context) => WalletHistoryDialog(
+                          completed: completed,
+                          amountStr: amountStr_,
+                          recipientAccount: fromOrTo,
+                          nameOfBank: bankName ?? '',
+                          accountOwner: 'VŨ ANH TÙNG,',
+                          content: content,
+                          creationTime: dateTimeStr,
+                          paymentTime: '20:00 05/07/2023'),
+                    ),
             title: Row(
               children: [
                 Text(
