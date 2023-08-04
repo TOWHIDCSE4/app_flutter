@@ -73,6 +73,10 @@ class OTPDigitTextFieldBox extends StatelessWidget {
             ),
             hintText: "",
           ),
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

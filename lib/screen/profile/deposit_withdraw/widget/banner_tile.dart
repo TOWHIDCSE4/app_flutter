@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/const/image_assets.dart';
 
@@ -40,6 +41,19 @@ class BannerTile extends StatelessWidget {
               ),
             )
           ],
+        ),
+        Positioned(
+          top: 0,
+          left: 0,
+          child: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+          ),
         ),
         Positioned(
           bottom: -8,
