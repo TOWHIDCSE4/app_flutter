@@ -4,6 +4,7 @@ import 'package:gohomy/const/color.dart';
 import 'package:gohomy/screen/profile/deposit_withdraw/deposit/deposit_entry_page.dart';
 
 import 'widget/banner_tile.dart';
+import 'widget/paginator.dart';
 import 'widget/tabbar_tile.dart';
 import 'widget/transaction_entry_navigation_tile.dart';
 import 'withdraw/withdraw_entry_page.dart';
@@ -33,7 +34,8 @@ class DepositWithdrawPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 TabbarTile(
                   initialIndex: initialIndex,
-                )
+                ),
+                const Paginator(),
               ],
             ),
           ),
