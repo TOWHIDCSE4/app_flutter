@@ -5,5 +5,5 @@
 class TestConst {
   const TestConst._();
 
-  static const bool isEnableDepositWithdraw = false;
+  static const bool isEnableDepositWithdraw = true;
 }

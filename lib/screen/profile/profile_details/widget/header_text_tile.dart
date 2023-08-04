@@ -34,8 +34,8 @@ class HeadingTextTile extends StatelessWidget {
             subTitle,
             style: const TextStyle(
               color: Color(0xFF084DF0),
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ) : const SizedBox.shrink(),
