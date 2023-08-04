@@ -21,24 +21,19 @@ class DepositWithdrawPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height * 1.27,
-            child: Column(
-              children: [
-                const BannerTile(),
-                TransactionEntryNavigationTile(
-                  onTapDeposit: () => Get.to(const DepositEntryPage()),
-                  onTapWithdraw: () => Get.to(const WithdrawEntryPage()),
-                ),
-                const SizedBox(height: 16),
-                TabbarTile(
-                  initialIndex: initialIndex,
-                ),
-                const Paginator(),
-              ],
+        child: Column(
+          children: [
+            const BannerTile(),
+            TransactionEntryNavigationTile(
+              onTapDeposit: () => Get.to(const DepositEntryPage()),
+              onTapWithdraw: () => Get.to(const WithdrawEntryPage()),
             ),
-          ),
+            const SizedBox(height: 16),
+            TabbarTile(
+              initialIndex: initialIndex,
+            ),
+            const Paginator(),
+          ],
         ),
       ),
     );
