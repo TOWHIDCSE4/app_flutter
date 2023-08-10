@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:gohomy/components/loading/loading_full_screen.dart';
 import 'package:gohomy/components/loading/loading_widget.dart';
 import 'package:gohomy/model/motel_room.dart';
+import 'package:gohomy/screen/find_room/room_information/room_information_screen.dart';
+import 'package:gohomy/screen/home/home_controller.dart';
 import 'package:gohomy/utils/string_utils.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -402,13 +404,20 @@ class _ListMotelRoomScreenState extends State<ListMotelRoomScreen>
   Widget roomItem(MotelRoom item) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => AddMotelRoomScreen(
-                  motelRoomInput: item,
+        Get.to(() => RoomInformationScreen(
+                  roomPostId: item.id,
+                  editButton: IconButton(
+                    onPressed: () {
+                      Get.to(() => AddMotelRoomScreen(motelRoomInput: item))!
+                          .then((value) => {
+                                widget.listMotelRoomController
+                                    .getAllMotelRoom(isRefresh: true)
+                              });
+                    },
+                    icon: const Icon(Icons.edit),
+                  ),
                 ))!
-            .then((value) => {
-                  widget.listMotelRoomController
-                      .getAllMotelRoom(isRefresh: true)
-                });
+            .then((value) => Get.find<HomeController>().getAllHomeApp());
       },
       child: Container(
         margin: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),

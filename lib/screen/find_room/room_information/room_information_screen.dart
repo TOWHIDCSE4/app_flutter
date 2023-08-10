@@ -37,8 +37,9 @@ import 'room_information_controller.dart';
 class RoomInformationScreen extends StatefulWidget {
   int? roomPostId;
   bool? isWatch;
+  Widget? editButton;
 
-  RoomInformationScreen({required this.roomPostId, this.isWatch});
+  RoomInformationScreen({required this.roomPostId, this.isWatch, this.editButton});
 
   @override
   State<RoomInformationScreen> createState() => _RoomInformationScreenState();
@@ -76,6 +77,7 @@ class _RoomInformationScreenState extends State<RoomInformationScreen> {
           style: TextStyle(color: Colors.white),
         ),
         actions: [
+          widget.editButton ?? Container(),
           if (dataAppController.currentUser.value.isAdmin == true)
             IconButton(
                 onPressed: () {
@@ -763,7 +765,7 @@ class _RoomInformationScreenState extends State<RoomInformationScreen> {
                               Get.to(() => PersonalInformationScreen(
                                     phoneNumber: roomInformationController
                                         .roomPost.value.user!.phoneNumber,
-                                        isFromPost: true,
+                                    isFromPost: true,
                                     user: roomInformationController
                                             .roomPost.value.user ??
                                         User(),
@@ -1807,7 +1809,6 @@ class _RoomInformationScreenState extends State<RoomInformationScreen> {
                                                                 .listSimilarPost[
                                                             index],
                                                     isInPost: true,
-                                                   
                                                   );
                                                 }),
                                           ),
@@ -1832,11 +1833,10 @@ class _RoomInformationScreenState extends State<RoomInformationScreen> {
                     children: [
                       InkWell(
                         onTap: () {
-                          
                           Get.to(() => ChatListLockScreen(
                                 toUser: roomInformationController
                                     .roomPost.value.user,
-                                 isBackAll: true,   
+                                isBackAll: true,
                                 motelPost:
                                     roomInformationController.roomPost.value,
                               ));
@@ -2157,7 +2157,7 @@ class _RoomInformationScreenState extends State<RoomInformationScreen> {
               QrImageView(
                 data: link,
                 version: QrVersions.auto,
-                size: Get.width/1.5,
+                size: Get.width / 1.5,
               ),
             ],
           ),

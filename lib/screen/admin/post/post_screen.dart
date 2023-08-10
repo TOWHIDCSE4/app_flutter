@@ -161,8 +161,36 @@ class _PostScreenState extends State<PostScreen>
                 ),
               ),
             ),
-            const Divider(
-              height: 1,
+            // const Divider(
+            //   height: 1,
+            // ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Obx(() {
+                int tabIndex = postController.status.value;
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text: tabIndex == 0 ? 'Total Rendering: ' : tabIndex == 2 ? 'Total Rendered: ' : 'Total Cancelled: ',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ),
+                          TextSpan(
+                            text: '${postController.listPost.length}',
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ]),
+                      )
+                    ],
+                  ),
+                );
+              }),
             ),
             SahaTextFieldSearch(
               hintText: "Tìm kiếm ",
