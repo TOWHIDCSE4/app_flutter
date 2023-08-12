@@ -51,6 +51,7 @@ class _ListMotelRoomScreenState extends State<ListMotelRoomScreen>
   late TabController _tabController;
   RefreshController refreshController = RefreshController();
   FavouritePostController favouritePostController = FavouritePostController();
+  int tabIndex = 0;
 
   @override
   void initState() {
@@ -108,6 +109,9 @@ class _ListMotelRoomScreenState extends State<ListMotelRoomScreen>
                   child: TabBar(
                     controller: _tabController,
                     onTap: (v) {
+                      setState(() {
+                        tabIndex = v;
+                      });
                       if (v == 2) {
                         widget.listMotelRoomController.status = 3;
                         widget.listMotelRoomController
@@ -168,6 +172,37 @@ class _ListMotelRoomScreenState extends State<ListMotelRoomScreen>
                 ),
               ),
             ],
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Obx(() {
+              // int? tabIndex = widget.adminMotelRoomController.status.obs.value;
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: tabIndex == 0
+                              ? 'Tổng phòng chưa thuê: '
+                              : tabIndex == 1
+                                  ? 'Tổng phòng đã thuê: '
+                                  : 'Tổng bản nháp: ',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.black),
+                        ),
+                        TextSpan(
+                          text: '${favouritePostController.total.obs.value}',
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      ]),
+                    )
+                  ],
+                ),
+              );
+            }),
           ),
           SahaTextFieldSearch(
             hintText: "Tìm kiếm phòng trọ",

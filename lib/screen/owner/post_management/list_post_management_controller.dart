@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 
 import '../../../components/arlert/saha_alert.dart';
@@ -13,12 +15,12 @@ class ListPostManagementController extends GetxController {
   var loadInit = true.obs;
   String? textSearch;
   int? initTab;
+  var total = 0.obs;
   ListPostManagementController({this.initTab}) {
-    if(initTab == null){
+    if (initTab == null) {
       getPostManagement(isRefresh: true);
-  }
     }
-    
+  }
 
   Future<void> getPostManagement({
     bool? isRefresh,
@@ -34,6 +36,8 @@ class ListPostManagementController extends GetxController {
         var data = await RepositoryManager.manageRepository
             .getAllPostManagement(
                 page: currentPage, status: status.value, search: textSearch);
+        total.value = data!.data!.total!;
+        log('Total::::::::::::::: $total');
 
         if (isRefresh == true) {
           listPostManagement(data!.data!.data!);

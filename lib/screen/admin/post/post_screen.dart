@@ -176,7 +176,11 @@ class _PostScreenState extends State<PostScreen>
                       RichText(
                         text: TextSpan(children: [
                           TextSpan(
-                            text: tabIndex == 0 ? 'Total Rendering: ' : tabIndex == 2 ? 'Total Rendered: ' : 'Total Cancelled: ',
+                            text: tabIndex == 0
+                                ? 'Tổng bài chờ duyệt: '
+                                : tabIndex == 2
+                                    ? 'Tổng bài hoạt động: '
+                                    : 'Tổng bài đã ẩn: ',
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black),

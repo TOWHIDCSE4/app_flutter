@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:gohomy/model/post_roommate.dart';
 
@@ -12,6 +14,7 @@ class PostRoommateAdminController extends GetxController {
   var isLoading = false.obs;
   var status = 0.obs;
   String? textSearch;
+  var total = 0.obs;
 
   PostRoommateAdminController() {
     getAllAdminPostRoommate(isRefresh: true);
@@ -30,6 +33,8 @@ class PostRoommateAdminController extends GetxController {
         isLoading.value = true;
         var data = await RepositoryManager.adminManageRepository
             .getAllAdminPostRoommate(page: currentPage, status: status.value);
+        total.value = data!.data!.total!;
+        log('Total::::::::::::::: $total');
 
         if (isRefresh == true) {
           listPostRoommate(data!.data!.data!);

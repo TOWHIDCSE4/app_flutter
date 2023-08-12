@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 
 import '../../../../components/arlert/saha_alert.dart';
@@ -12,6 +14,7 @@ class FindRoomPostAdminController extends GetxController {
   var isLoading = false.obs;
   var status = 0.obs;
   String? textSearch;
+  var total = 0.obs;
 
   FindRoomPostAdminController() {
     getAllAdminPostFindRoom(isRefresh: true);
@@ -30,6 +33,8 @@ class FindRoomPostAdminController extends GetxController {
         isLoading.value = true;
         var data = await RepositoryManager.adminManageRepository
             .getAllAdminPostFindRoom(page: currentPage, status: status.value);
+        total.value = data!.data!.total!;
+        log('Total::::::::::::::: $total');
 
         if (isRefresh == true) {
           listPostFindRoom(data!.data!.data!);

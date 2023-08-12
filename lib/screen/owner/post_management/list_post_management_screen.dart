@@ -16,6 +16,8 @@ import '../../../const/motel_type.dart';
 import '../../../model/motel_post.dart';
 import '../../../utils/date_utils.dart';
 import '../../../utils/debounce.dart';
+import '../../admin/post/post_controller.dart';
+import '../../admin/post/post_details/post_details_screen.dart';
 import 'add_update_post_management/add_update_post_management_screen.dart';
 import 'list_post_management_controller.dart';
 
@@ -39,6 +41,8 @@ class _ListPostManagementScreenState extends State<ListPostManagementScreen>
  
   RefreshController refreshController = RefreshController();
   late TabController _tabController;
+  PostController postController = PostController();
+  int tabIndex = 0;
 
   @override
   void initState() {
@@ -109,6 +113,9 @@ class _ListPostManagementScreenState extends State<ListPostManagementScreen>
                     child: TabBar(
                       controller: _tabController,
                       onTap: (v) {
+                        setState(() {
+                          tabIndex = v;
+                        });
                         widget.controller.status.value = (v == 0
                             ? 0
                             : v == 1
@@ -164,6 +171,38 @@ class _ListPostManagementScreenState extends State<ListPostManagementScreen>
                 ),
               ],
             ),
+            Align(
+            alignment: Alignment.bottomLeft,
+            child: Obx(() {
+              // int? tabIndex = widget.adminMotelRoomController.status.obs.value;
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: tabIndex == 0
+                              ? 'Tổng bài chờ duyệt: '
+                              : tabIndex == 1
+                                  ? 'Tổng bài hoạt động: '
+                                  : 'Tổng bài đã ẩn: ',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.black),
+                        ),
+                        TextSpan(
+                          text:
+                              '${widget.controller.total.obs.value}',
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      ]),
+                    )
+                  ],
+                ),
+              );
+            }),
+          ),
             SahaTextFieldSearch(
               hintText: "Tìm kiếm bài đăng",
               onChanged: (v) {
@@ -256,13 +295,18 @@ class _ListPostManagementScreenState extends State<ListPostManagementScreen>
       }
     return GestureDetector(
       onTap: () {
-        Get.to(() => AddUpdatePostManagementScreen(
-                  id: item.id,
+        // Get.to(() => AddUpdatePostManagementScreen(
+        //           id: item.id,
+        //         ))!
+        //     .then((value) => {
+        //           widget.controller.getPostManagement(
+        //               isRefresh: true)
+        //         });
+        Get.to(() => PostDetailsScreen(
+                  id: item.id!,
+                  motelPostInput: item,
                 ))!
-            .then((value) => {
-                  widget.controller.getPostManagement(
-                      isRefresh: true)
-                });
+            .then((value) => postController.getAllMotelPost(isRefresh: true));
       },
       child: Container(
         margin: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),

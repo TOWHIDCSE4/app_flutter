@@ -207,7 +207,11 @@ class _AdminMotelRoomScreenState extends State<AdminMotelRoomScreen>
                       RichText(
                         text: TextSpan(children: [
                           TextSpan(
-                            text: tabIndex == 0 ? 'Total Rendering: ' : tabIndex == 1 ? 'Total Rendered: ' : 'Total Cancelled: ',
+                            text: tabIndex == 0
+                                ? 'Tổng phòng chưa thuê: '
+                                : tabIndex == 1
+                                    ? 'Tổng phòng đã thuê: '
+                                    : 'Tổng bản nháp: ',
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black),

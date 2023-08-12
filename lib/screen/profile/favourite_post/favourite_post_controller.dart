@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:gohomy/model/motel_post.dart';
 
@@ -10,6 +12,7 @@ class FavouritePostController extends GetxController {
   int currentPage = 1;
   bool isEnd = false;
   var isLoading = false.obs;
+  var total = 0.obs;
 
   Future<void> getAllMotelPost({
     bool? isRefresh,
@@ -26,6 +29,8 @@ class FavouritePostController extends GetxController {
             await RepositoryManager.userManageRepository.getAllFavouritePost(
           page: currentPage,
         );
+        total.value = data!.data!.total!;
+        log('Total::::::::::::::: $total');
 
         if (isRefresh == true) {
           favouritePost(data!.data!.data!);

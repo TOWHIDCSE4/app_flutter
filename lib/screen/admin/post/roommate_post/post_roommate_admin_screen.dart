@@ -32,6 +32,7 @@ class _PostRoommateAdminScreenState extends State<PostRoommateAdminScreen>
   PostRoommateAdminController controller = PostRoommateAdminController();
   RefreshController refreshController = RefreshController();
   late TabController _tabController;
+  int tabIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -56,6 +57,9 @@ class _PostRoommateAdminScreenState extends State<PostRoommateAdminScreen>
                   child: TabBar(
                     controller: _tabController,
                     onTap: (v) {
+                      setState(() {
+                        tabIndex = v;
+                      });
                       controller.status.value = (v == 0
                           ? 0
                           : v == 1
@@ -109,6 +113,38 @@ class _PostRoommateAdminScreenState extends State<PostRoommateAdminScreen>
                 ),
               ),
             ],
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Obx(() {
+              // int? tabIndex = widget.adminMotelRoomController.status.obs.value;
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: tabIndex == 0
+                              ? 'Tổng bài chờ duyệt: '
+                              : tabIndex == 1
+                                  ? 'Tổng bài hoạt động: '
+                                  : 'Tổng bài đã ẩn: ',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.black),
+                        ),
+                        TextSpan(
+                          text:
+                              '${controller.total.obs.value}',
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      ]),
+                    )
+                  ],
+                ),
+              );
+            }),
           ),
           SahaTextFieldSearch(
             hintText: "Tìm kiếm bài đăng",

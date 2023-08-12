@@ -29,6 +29,7 @@ class _FindRoomPostAdminScreenState extends State<FindRoomPostAdminScreen>
   FindRoomPostAdminController controller = FindRoomPostAdminController();
   RefreshController refreshController = RefreshController();
   late TabController _tabController;
+  int tabIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -53,6 +54,9 @@ class _FindRoomPostAdminScreenState extends State<FindRoomPostAdminScreen>
                   child: TabBar(
                     controller: _tabController,
                     onTap: (v) {
+                      setState(() {
+                        tabIndex = v;
+                      });
                       controller.status.value = (v == 0
                           ? 0
                           : v == 1
@@ -106,6 +110,38 @@ class _FindRoomPostAdminScreenState extends State<FindRoomPostAdminScreen>
                 ),
               ),
             ],
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Obx(() {
+              // int? tabIndex = widget.adminMotelRoomController.status.obs.value;
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: tabIndex == 0
+                              ? 'Tổng bài chờ duyệt: '
+                              : tabIndex == 1
+                                  ? 'Tổng bài hoạt động: '
+                                  : 'Tổng bài đã ẩn: ',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.black),
+                        ),
+                        TextSpan(
+                          text:
+                              '${controller.total.obs.value}',
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      ]),
+                    )
+                  ],
+                ),
+              );
+            }),
           ),
           SahaTextFieldSearch(
             hintText: "Tìm kiếm bài đăng",
@@ -332,14 +368,14 @@ class _FindRoomPostAdminScreenState extends State<FindRoomPostAdminScreen>
                 ),
               ],
             ),
-               Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                          '${SahaDateUtils().getDDMMYY(item.createdAt ?? DateTime.now())} ${SahaDateUtils().getHHMM(item.createdAt ?? DateTime.now())}'),
-                      Text('Số lần gọi đến : ${item.numberCalls ?? ''} '),
-                    ],
-                  )
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                    '${SahaDateUtils().getDDMMYY(item.createdAt ?? DateTime.now())} ${SahaDateUtils().getHHMM(item.createdAt ?? DateTime.now())}'),
+                Text('Số lần gọi đến : ${item.numberCalls ?? ''} '),
+              ],
+            )
           ],
         ),
       ),
