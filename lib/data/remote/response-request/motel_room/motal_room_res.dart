@@ -30,11 +30,13 @@ class Data {
     this.currentPage,
     this.data,
     this.nextPageUrl,
+    this.total,
   });
 
   int? currentPage;
   List<MotelRoom>? data;
   String? nextPageUrl;
+  int? total;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         currentPage: json["current_page"],
@@ -42,7 +44,7 @@ class Data {
             ? null
             : List<MotelRoom>.from(
                 json["data"].map((x) => MotelRoom.fromJson(x))),
-        nextPageUrl:
-            json["next_page_url"],
+        nextPageUrl: json["next_page_url"],
+        total: json["total"],
       );
 }

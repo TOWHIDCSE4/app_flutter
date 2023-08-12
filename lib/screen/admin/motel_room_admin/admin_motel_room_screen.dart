@@ -7,6 +7,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:gohomy/components/loading/loading_full_screen.dart';
 import 'package:gohomy/screen/admin/motel_room_admin/admin_motel_room_controller.dart';
+import 'package:gohomy/screen/find_room/room_information/room_information_screen.dart';
+import 'package:gohomy/screen/home/home_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../components/empty/saha_empty_image.dart';
@@ -41,6 +43,7 @@ class _AdminMotelRoomScreenState extends State<AdminMotelRoomScreen>
     with SingleTickerProviderStateMixin {
   RefreshController refreshController = RefreshController();
   late TabController _tabController;
+  int tabIndex = 0;
 
   @override
   void initState() {
@@ -128,6 +131,9 @@ class _AdminMotelRoomScreenState extends State<AdminMotelRoomScreen>
                     child: TabBar(
                       controller: _tabController,
                       onTap: (v) {
+                        setState(() {
+                          tabIndex = v;
+                        });
                         if (v == 2) {
                           widget.adminMotelRoomController.status = 3;
                           widget.adminMotelRoomController
@@ -188,6 +194,35 @@ class _AdminMotelRoomScreenState extends State<AdminMotelRoomScreen>
                   ),
                 ),
               ],
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Obx(() {
+                // int? tabIndex = widget.adminMotelRoomController.status.obs.value;
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text: tabIndex == 0 ? 'Total Rendering: ' : tabIndex == 1 ? 'Total Rendered: ' : 'Total Cancelled: ',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ),
+                          TextSpan(
+                            text: '${widget
+                                .adminMotelRoomController.total.obs.value}',
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ]),
+                      )
+                    ],
+                  ),
+                );
+              }),
             ),
             SahaTextFieldSearch(
               hintText: "Tìm kiếm phòng trọ",
@@ -435,9 +470,21 @@ class _AdminMotelRoomScreenState extends State<AdminMotelRoomScreen>
   Widget roomItem(MotelRoom item) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => AddMotelRoomScreen(motelRoomInput: item))!.then((value) =>
-            widget.adminMotelRoomController
-                .getAllAdminMotelRoom(isRefresh: true));
+        // Get.to(() => AddMotelRoomScreen(motelRoomInput: item))!.then((value) =>
+        //     widget.adminMotelRoomController
+        //         .getAllAdminMotelRoom(isRefresh: true));
+        Get.to(() => RoomInformationScreen(
+              roomPostId: item.id,
+              editButton: IconButton(
+                onPressed: () {
+                  Get.to(() => AddMotelRoomScreen(motelRoomInput: item))!
+                      .then((value) => widget.adminMotelRoomController
+                          .getAllAdminMotelRoom(isRefresh: true));
+                },
+                icon: const Icon(Icons.edit),
+              ),
+            ))!
+        .then((value) => Get.find<HomeController>().getAllHomeApp());
       },
       child: Stack(
         children: [

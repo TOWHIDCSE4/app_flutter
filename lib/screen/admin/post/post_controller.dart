@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:gohomy/data/repository/repository_manager.dart';
 import 'package:gohomy/model/motel_post.dart';
@@ -14,6 +16,7 @@ class PostController extends GetxController {
   var isLoading = false.obs;
   bool isEnd = false;
   var userChoose = User().obs;
+  var total = 0.obs;
 
   PostController() {
     getAllMotelPost(isRefresh: true);
@@ -36,6 +39,8 @@ class PostController extends GetxController {
           status: status.value,
               userId: userChoose.value.id,
         );
+        total.value = data!.data!.total!;
+        log('Total::::::::::::::: $total');
 
         if (isRefresh == true) {
           listPost(data!.data!.data!);

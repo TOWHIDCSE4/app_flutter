@@ -9,6 +9,7 @@ import 'package:gohomy/components/loading/loading_widget.dart';
 import 'package:gohomy/model/motel_room.dart';
 import 'package:gohomy/screen/find_room/room_information/room_information_screen.dart';
 import 'package:gohomy/screen/home/home_controller.dart';
+import 'package:gohomy/screen/profile/favourite_post/favourite_post_controller.dart';
 import 'package:gohomy/utils/string_utils.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -17,6 +18,7 @@ import '../../../components/text_field/saha_text_field_search.dart';
 import '../../../const/motel_type.dart';
 import '../../../model/tower.dart';
 import '../../../utils/debounce.dart';
+import '../../profile/favourite_post/favourite_post_details/favourite_details_screen.dart';
 import 'add_motel_room/add_motel_room_screen.dart';
 import 'list_motel_room_controller.dart';
 
@@ -48,9 +50,11 @@ class _ListMotelRoomScreenState extends State<ListMotelRoomScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   RefreshController refreshController = RefreshController();
+  FavouritePostController favouritePostController = FavouritePostController();
 
   @override
   void initState() {
+    favouritePostController.getAllMotelPost(isRefresh: true);
     if (widget.isNext == true) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         Get.to(() => AddMotelRoomScreen())!.then((value) =>
@@ -180,7 +184,7 @@ class _ListMotelRoomScreenState extends State<ListMotelRoomScreen>
             },
           ),
           Obx(
-            ()=> Expanded(
+            () => Expanded(
               child: SmartRefresher(
                 footer: CustomFooter(
                   builder: (
@@ -216,12 +220,14 @@ class _ListMotelRoomScreenState extends State<ListMotelRoomScreen>
                 },
                 controller: refreshController,
                 child: ListView.builder(
-                          addAutomaticKeepAlives: false,
-                          addRepaintBoundaries: false,
-                          itemCount:  widget.listMotelRoomController.listMotelRoom.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return roomItem( widget.listMotelRoomController.listMotelRoom[index]);
-                          }),
+                    addAutomaticKeepAlives: false,
+                    addRepaintBoundaries: false,
+                    itemCount:
+                        widget.listMotelRoomController.listMotelRoom.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return roomItem(
+                          widget.listMotelRoomController.listMotelRoom[index]);
+                    }),
               ),
             ),
           ),
@@ -404,20 +410,27 @@ class _ListMotelRoomScreenState extends State<ListMotelRoomScreen>
   Widget roomItem(MotelRoom item) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => RoomInformationScreen(
-                  roomPostId: item.id,
-                  editButton: IconButton(
-                    onPressed: () {
-                      Get.to(() => AddMotelRoomScreen(motelRoomInput: item))!
-                          .then((value) => {
-                                widget.listMotelRoomController
-                                    .getAllMotelRoom(isRefresh: true)
-                              });
-                    },
-                    icon: const Icon(Icons.edit),
-                  ),
-                ))!
-            .then((value) => Get.find<HomeController>().getAllHomeApp());
+        Get.to(() => AddMotelRoomScreen(motelRoomInput: item))!.then((value) =>
+            {widget.listMotelRoomController.getAllMotelRoom(isRefresh: true)});
+        // Get.to(() => RoomInformationScreen(
+        //           roomPostId: item.id,
+        //           editButton: IconButton(
+        //             onPressed: () {
+        //               Get.to(() => AddMotelRoomScreen(motelRoomInput: item))!
+        //                   .then((value) => {
+        //                         widget.listMotelRoomController
+        //                             .getAllMotelRoom(isRefresh: true)
+        //                       });
+        //             },
+        //             icon: const Icon(Icons.edit),
+        //           ),
+        //         ))!
+        //     .then((value) => Get.find<HomeController>().getAllHomeApp());
+        // Get.to(() => FavouriteDetailsScreen(
+        //           roomPostId: item.id,
+        //         ))!
+        //     .then((value) =>
+        //         favouritePostController.getAllMotelPost(isRefresh: true));
       },
       child: Container(
         margin: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
@@ -442,10 +455,8 @@ class _ListMotelRoomScreenState extends State<ListMotelRoomScreen>
                 ClipRRect(
                   borderRadius: BorderRadius.circular(5.0),
                   child: Image.network(
-                     ((item.images ?? []).isNotEmpty
-                                    ? item.images![0]
-                                    : "") +
-                                "?reduce_file=true",
+                    ((item.images ?? []).isNotEmpty ? item.images![0] : "") +
+                        "?reduce_file=true",
                     height: 120,
                     width: 120,
                     fit: BoxFit.cover,

@@ -77,9 +77,9 @@ class _RoomInformationScreenState extends State<RoomInformationScreen> {
           style: TextStyle(color: Colors.white),
         ),
         actions: [
-          widget.editButton ?? Container(),
+          // widget.editButton ?? Container(),
           if (dataAppController.currentUser.value.isAdmin == true)
-            IconButton(
+          widget.editButton ?? IconButton(
                 onPressed: () {
                   Get.to(() => AddUpdatePostManagementScreen(
                             id: widget.roomPostId,

@@ -182,7 +182,7 @@ class _PostScreenState extends State<PostScreen>
                                 color: Colors.black),
                           ),
                           TextSpan(
-                            text: '${postController.listPost.length}',
+                            text: '${postController.total.obs.value}',
                             style: const TextStyle(color: Colors.black),
                           ),
                         ]),

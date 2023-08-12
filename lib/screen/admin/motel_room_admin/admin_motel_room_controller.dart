@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 
 import '../../../components/arlert/saha_alert.dart';
@@ -19,7 +21,8 @@ class AdminMotelRoomController extends GetxController {
   bool? isTower;
   int? towerId;
   bool? isSupportTower;
-  AdminMotelRoomController({this.isTower, this.towerId,this.isSupportTower}) {
+  var total = 0.obs;
+  AdminMotelRoomController({this.isTower, this.towerId, this.isSupportTower}) {
     userChoose.value = Get.find<DataAppController>().currentUser.value;
     if (userChoose.value.id ==
         Get.find<DataAppController>().currentUser.value.id) {
@@ -48,13 +51,16 @@ class AdminMotelRoomController extends GetxController {
                 hasContract: status == null ? hasContract.value : null,
                 status: status,
                 towerId: towerId,
-                isHaveTower: isTower,isSupporter: isSupportTower);
+                isHaveTower: isTower,
+                isSupporter: isSupportTower);
+        total.value = data!.data!.total!;
+        log('Total::::::::::::::: $total');
 
         if (isRefresh == true) {
-          listMotelRoom(data!.data!.data!);
+          listMotelRoom(data.data!.data!);
           listMotelRoom.refresh();
         } else {
-          listMotelRoom.addAll(data!.data!.data!);
+          listMotelRoom.addAll(data.data!.data!);
         }
 
         if (data.data!.nextPageUrl == null) {

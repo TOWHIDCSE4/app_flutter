@@ -37,11 +37,13 @@ class Data {
     this.currentPage,
     this.data,
     this.nextPageUrl,
+    this.total,
   });
 
   int? currentPage;
   List<MotelPost>? data;
   String? nextPageUrl;
+  int? total;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         currentPage: json["current_page"],
@@ -50,6 +52,7 @@ class Data {
             : List<MotelPost>.from(
                 json["data"].map((x) => MotelPost.fromJson(x))),
         nextPageUrl: json["next_page_url"],
+        total: json["total"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -58,5 +61,6 @@ class Data {
             ? null
             : List<dynamic>.from(data!.map((x) => x.toJson())),
         "next_page_url": nextPageUrl,
+        "total": total
       };
 }
