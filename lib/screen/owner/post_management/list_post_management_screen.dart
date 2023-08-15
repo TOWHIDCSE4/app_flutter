@@ -41,7 +41,7 @@ class _ListPostManagementScreenState extends State<ListPostManagementScreen>
  
   RefreshController refreshController = RefreshController();
   late TabController _tabController;
-  PostController postController = PostController();
+  PostController postController = PostController(showToast: false);
   int tabIndex = 0;
 
   @override
@@ -295,16 +295,16 @@ class _ListPostManagementScreenState extends State<ListPostManagementScreen>
       }
     return GestureDetector(
       onTap: () {
-        // Get.to(() => AddUpdatePostManagementScreen(
-        //           id: item.id,
-        //         ))!
-        //     .then((value) => {
-        //           widget.controller.getPostManagement(
-        //               isRefresh: true)
-        //         });
         Get.to(() => PostDetailsScreen(
                   id: item.id!,
                   motelPostInput: item,
+                  onTapEdit: () {
+                    Get.to(() => AddUpdatePostManagementScreen(
+                      id: item.id,
+                    ))!.then((value) => {
+                      widget.controller.getPostManagement(isRefresh: true)
+                    });
+                  },
                 ))!
             .then((value) => postController.getAllMotelPost(isRefresh: true));
       },

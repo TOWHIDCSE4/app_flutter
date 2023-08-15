@@ -23,8 +23,14 @@ import '../../../owner/post_management/add_update_post_management/add_update_pos
 class PostDetailsScreen extends StatelessWidget {
   MotelPost? motelPostInput;
   int id;
+  final VoidCallback? onTapEdit;
 
-  PostDetailsScreen({super.key, required this.id, this.motelPostInput}) {
+  PostDetailsScreen({
+    super.key,
+    required this.id,
+    this.motelPostInput,
+    this.onTapEdit,
+  }) {
     postDetailsController = PostDetailsController(id: id);
   }
 
@@ -35,7 +41,7 @@ class PostDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Obx(
-        () => postDetailsController.loadInit.value
+        () => postDetailsController.loadInit.value || onTapEdit != null
             ? const SizedBox()
             : SizedBox(
                 height: 90,
@@ -306,12 +312,17 @@ class PostDetailsScreen extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                Get.to(() => ChatListScreen(
+                if (onTapEdit == null) {
+                  Get.to(() => ChatListScreen(
                       toUser: postDetailsController.motelPost.value.user,
                       isBackAll: true,
                     ));
+                } else {
+                  onTapEdit!();
+                }
               },
-              icon: const Icon(Icons.chat)),
+              icon: onTapEdit == null ? const Icon(Icons.chat) : const Icon(Icons.edit)
+          ),
           GestureDetector(
             onTap: () {
               SahaDialogApp.showDialogYesNo(

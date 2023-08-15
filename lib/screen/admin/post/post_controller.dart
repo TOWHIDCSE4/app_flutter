@@ -18,11 +18,12 @@ class PostController extends GetxController {
   var userChoose = User().obs;
   var total = 0.obs;
 
-  PostController() {
-    getAllMotelPost(isRefresh: true);
+  PostController({bool showToast = true}) {
+    getAllMotelPost(isRefresh: true, showToast: showToast);
   }
   Future<void> getAllMotelPost({
     bool? isRefresh,
+    bool? showToast,
   }) async {
     if (isRefresh == true) {
       currentPage = 1;
@@ -59,7 +60,9 @@ class PostController extends GetxController {
       isLoading.value = false;
       loadInit.value = false;
     } catch (err) {
-      SahaAlert.showError(message: err.toString());
+      if (showToast == true) {
+        SahaAlert.showError(message: err.toString());
+      }
     }
   }
 }
