@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
 
+import '../data/deposit_withdraw_repository.dart';
 import 'history_card_tile.dart';
 
-class DepositHistoryTile extends StatelessWidget {
+class DepositHistoryTile extends StatefulWidget {
   const DepositHistoryTile({
     super.key,
   });
 
+  @override
+  State<DepositHistoryTile> createState() => _DepositHistoryTileState();
+}
+
+class _DepositHistoryTileState extends State<DepositHistoryTile> {
+  @override
+  void initState() {
+    DepositWithDrawRepository.instance.getDepositHistory();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
