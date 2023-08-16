@@ -2,8 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:gohomy/components/arlert/saha_alert.dart';
 import 'package:gohomy/components/loading/loading_full_screen.dart';
 import 'package:gohomy/screen/admin/post/post_details/post_details_controller.dart';
+import 'package:gohomy/screen/find_room/find_room_post/post_find_room_controller.dart';
+import 'package:gohomy/utils/share.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../components/dialog/dialog.dart';
@@ -24,14 +28,18 @@ class PostDetailsScreen extends StatelessWidget {
   MotelPost? motelPostInput;
   int id;
   final VoidCallback? onTapEdit;
+  late PostFindRoomController controller;
+  final bool isVisibleShareIcon;
 
   PostDetailsScreen({
     super.key,
     required this.id,
     this.motelPostInput,
     this.onTapEdit,
+    this.isVisibleShareIcon = false,
   }) {
     postDetailsController = PostDetailsController(id: id);
+    controller = PostFindRoomController(postFindRoomId: id);
   }
 
   late PostDetailsController postDetailsController;
@@ -314,16 +322,18 @@ class PostDetailsScreen extends StatelessWidget {
               onPressed: () {
                 if (onTapEdit == null) {
                   Get.to(() => ChatListScreen(
-                      toUser: postDetailsController.motelPost.value.user,
-                      isBackAll: true,
-                    ));
+                        toUser: postDetailsController.motelPost.value.user,
+                        isBackAll: true,
+                      ));
                 } else {
                   onTapEdit!();
                 }
               },
-              icon: onTapEdit == null ? const Icon(Icons.chat) : const Icon(Icons.edit)
-          ),
-          GestureDetector(
+              icon: onTapEdit == null
+                  ? const Icon(Icons.chat)
+                  : const Icon(Icons.edit)),
+                  
+          !isVisibleShareIcon ? GestureDetector(
             onTap: () {
               SahaDialogApp.showDialogYesNo(
                   mess: "Bạn có chắc muốn xoá bài đăng này",
@@ -339,7 +349,85 @@ class PostDetailsScreen extends StatelessWidget {
                 FontAwesomeIcons.trashCan,
               ),
             ),
-          )
+          ) :
+          IconButton(
+              onPressed: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                    ),
+                  ),
+                  builder: (BuildContext context) => SafeArea(
+                    child: Container(
+                      height: 200,
+                      padding: const EdgeInsets.only(left: 5),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          TextButton(
+                            onPressed: () async {
+                              Navigator.pop(context);
+                              await controller.buildLink();
+                              if (controller.linkPost == null) {
+                                SahaAlert.showError(
+                                    message:
+                                        "Có lỗi xảy ra, vui lòng thử lại sau");
+                                return;
+                              }
+                              shareLink(controller.linkPost!);
+                            },
+                            child: const Align(
+                              alignment: AlignmentDirectional.centerStart,
+                              child: Text(
+                                'Chia sẻ link',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              Navigator.pop(context);
+                              await controller.buildLink();
+                              if (controller.linkPost == null) {
+                                SahaAlert.showError(
+                                    message:
+                                        "Có lỗi xảy ra, vui lòng thử lại sau");
+                                return;
+                              }
+
+                              shareQr(controller.linkPost!);
+                            },
+                            child: const Align(
+                              alignment: AlignmentDirectional.centerStart,
+                              child: Text(
+                                'Chia sẻ mã QR',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Align(
+                              alignment: AlignmentDirectional.centerStart,
+                              child: Text(
+                                'Đóng',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+                // SharePost().sharePostImage(
+                //     roomInformationController.roomPost.value.images ?? [],
+                //     roomInformationController.roomPost.value.title ?? "");
+              },
+              icon: const Icon(Icons.share_rounded)),
         ],
       ),
       body: Obx(
@@ -350,11 +438,17 @@ class PostDetailsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     RoomImage(
-                                                   key: Key(const Uuid().v4()),
-                     listImageUrl: postDetailsController.motelRoomChoose.value.id == null ?
-                                  postDetailsController.motelPost.value.images : postDetailsController.motelRoomChoose.value.images,
-                              linkVideo: postDetailsController.motelRoomChoose.value.id == null ?
-                                  postDetailsController.motelPost.value.linkVideo : postDetailsController.motelRoomChoose.value.videoLink,
+                      key: Key(const Uuid().v4()),
+                      listImageUrl:
+                          postDetailsController.motelRoomChoose.value.id == null
+                              ? postDetailsController.motelPost.value.images
+                              : postDetailsController
+                                  .motelRoomChoose.value.images,
+                      linkVideo:
+                          postDetailsController.motelRoomChoose.value.id == null
+                              ? postDetailsController.motelPost.value.linkVideo
+                              : postDetailsController
+                                  .motelRoomChoose.value.videoLink,
                     ),
                     const SizedBox(
                       height: 15,
@@ -932,9 +1026,15 @@ class PostDetailsScreen extends StatelessWidget {
                           ),
                           Wrap(
                             children: [
-                           if ((postDetailsController
-                                            .motelPost.value.hasWc ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasWc == true)
+                              if ((postDetailsController
+                                              .motelPost.value.hasWc ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController
+                                          .motelRoomChoose.value.hasWc ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -959,8 +1059,14 @@ class PostDetailsScreen extends StatelessWidget {
                                   ),
                                 ),
                               if ((postDetailsController
-                                            .motelPost.value.hasMezzanine ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasMezzanine == true)
+                                              .motelPost.value.hasMezzanine ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController
+                                          .motelRoomChoose.value.hasMezzanine ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -984,9 +1090,15 @@ class PostDetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                            if ((postDetailsController
-                                            .motelPost.value.hasBalcony ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasBalcony == true)
+                              if ((postDetailsController
+                                              .motelPost.value.hasBalcony ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController
+                                          .motelRoomChoose.value.hasBalcony ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1010,9 +1122,15 @@ class PostDetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                          if ((postDetailsController
-                                            .motelPost.value.hasFingerprint ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasFingerprint == true)
+                              if ((postDetailsController
+                                              .motelPost.value.hasFingerprint ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController.motelRoomChoose.value
+                                          .hasFingerprint ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1037,8 +1155,14 @@ class PostDetailsScreen extends StatelessWidget {
                                   ),
                                 ),
                               if ((postDetailsController
-                                            .motelPost.value.hasOwnOwner ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasOwnOwner == true)
+                                              .motelPost.value.hasOwnOwner ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController
+                                          .motelRoomChoose.value.hasOwnOwner ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1062,9 +1186,15 @@ class PostDetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                             if ((postDetailsController
-                                            .motelPost.value.hasPet ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasPet == true)
+                              if ((postDetailsController
+                                              .motelPost.value.hasPet ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController
+                                          .motelRoomChoose.value.hasPet ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1111,9 +1241,15 @@ class PostDetailsScreen extends StatelessWidget {
                           ),
                           Wrap(
                             children: [
-                           if ((postDetailsController
-                                            .motelPost.value.hasAirConditioner ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasAirConditioner == true)
+                              if ((postDetailsController.motelPost.value
+                                              .hasAirConditioner ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController.motelRoomChoose.value
+                                          .hasAirConditioner ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1138,8 +1274,14 @@ class PostDetailsScreen extends StatelessWidget {
                                   ),
                                 ),
                               if ((postDetailsController
-                                            .motelPost.value.hasWaterHeater ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasWaterHeater == true)
+                                              .motelPost.value.hasWaterHeater ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController.motelRoomChoose.value
+                                          .hasWaterHeater ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1163,9 +1305,15 @@ class PostDetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                             if ((postDetailsController
-                                            .motelPost.value.hasKitchen ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasKitchen == true)
+                              if ((postDetailsController
+                                              .motelPost.value.hasKitchen ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController
+                                          .motelRoomChoose.value.hasKitchen ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1189,9 +1337,15 @@ class PostDetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                             if ((postDetailsController
-                                            .motelPost.value.hasFridge ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasFridge == true)
+                              if ((postDetailsController
+                                              .motelPost.value.hasFridge ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController
+                                          .motelRoomChoose.value.hasFridge ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1216,8 +1370,14 @@ class PostDetailsScreen extends StatelessWidget {
                                   ),
                                 ),
                               if ((postDetailsController
-                                            .motelPost.value.hasBed ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasBed == true)
+                                              .motelPost.value.hasBed ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController
+                                          .motelRoomChoose.value.hasBed ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1241,9 +1401,15 @@ class PostDetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                              if ((postDetailsController
-                                            .motelPost.value.hasWashingMachine ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasWashingMachine == true)
+                              if ((postDetailsController.motelPost.value
+                                              .hasWashingMachine ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController.motelRoomChoose.value
+                                          .hasWashingMachine ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1267,9 +1433,15 @@ class PostDetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                           if ((postDetailsController
-                                            .motelPost.value.hasKitchenStuff ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasKitchenStuff == true)
+                              if ((postDetailsController.motelPost.value
+                                              .hasKitchenStuff ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController.motelRoomChoose.value
+                                          .hasKitchenStuff ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1293,9 +1465,15 @@ class PostDetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                               if ((postDetailsController
-                                            .motelPost.value.hasTable ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasTable == true)
+                              if ((postDetailsController
+                                              .motelPost.value.hasTable ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController
+                                          .motelRoomChoose.value.hasTable ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1319,9 +1497,15 @@ class PostDetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                              if ((postDetailsController
-                                            .motelPost.value.hasDecorativeLights ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasDecorativeLights == true)
+                              if ((postDetailsController.motelPost.value
+                                              .hasDecorativeLights ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController.motelRoomChoose.value
+                                          .hasDecorativeLights ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1345,9 +1529,15 @@ class PostDetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                            if ((postDetailsController
-                                            .motelPost.value.hasPicture ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasPicture == true)
+                              if ((postDetailsController
+                                              .motelPost.value.hasPicture ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController
+                                          .motelRoomChoose.value.hasPicture ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1372,8 +1562,14 @@ class PostDetailsScreen extends StatelessWidget {
                                   ),
                                 ),
                               if ((postDetailsController
-                                            .motelPost.value.hasTree ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasTree == true)
+                                              .motelPost.value.hasTree ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController
+                                          .motelRoomChoose.value.hasTree ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1397,9 +1593,15 @@ class PostDetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                               if ((postDetailsController
-                                            .motelPost.value.hasPillow ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasPillow == true)
+                              if ((postDetailsController
+                                              .motelPost.value.hasPillow ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController
+                                          .motelRoomChoose.value.hasPillow ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1423,9 +1625,15 @@ class PostDetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                             if ((postDetailsController
-                                            .motelPost.value.hasWardrobe ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasWardrobe == true)
+                              if ((postDetailsController
+                                              .motelPost.value.hasWardrobe ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController
+                                          .motelRoomChoose.value.hasWardrobe ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1449,9 +1657,15 @@ class PostDetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                               if ((postDetailsController
-                                            .motelPost.value.hasMattress ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasMattress == true)
+                              if ((postDetailsController
+                                              .motelPost.value.hasMattress ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController
+                                          .motelRoomChoose.value.hasMattress ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1476,8 +1690,14 @@ class PostDetailsScreen extends StatelessWidget {
                                   ),
                                 ),
                               if ((postDetailsController
-                                            .motelPost.value.hasShoesRacks ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasShoesRacks == true)
+                                              .motelPost.value.hasShoesRacks ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController.motelRoomChoose.value
+                                          .hasShoesRacks ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1502,8 +1722,14 @@ class PostDetailsScreen extends StatelessWidget {
                                   ),
                                 ),
                               if ((postDetailsController
-                                            .motelPost.value.hasCurtain ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasCurtain == true)
+                                              .motelPost.value.hasCurtain ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController
+                                          .motelRoomChoose.value.hasCurtain ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1527,9 +1753,15 @@ class PostDetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                               if ((postDetailsController
-                                            .motelPost.value.hasCeilingFans ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasCeilingFans == true)
+                              if ((postDetailsController
+                                              .motelPost.value.hasCeilingFans ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController.motelRoomChoose.value
+                                          .hasCeilingFans ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1554,8 +1786,14 @@ class PostDetailsScreen extends StatelessWidget {
                                   ),
                                 ),
                               if ((postDetailsController
-                                            .motelPost.value.hasMirror ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasMirror == true)
+                                              .motelPost.value.hasMirror ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController
+                                          .motelRoomChoose.value.hasMirror ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1579,9 +1817,15 @@ class PostDetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                               if ((postDetailsController
-                                            .motelPost.value.hasSofa ==
-                                        true && postDetailsController.motelRoomChoose.value.id == null) || postDetailsController.motelRoomChoose.value.hasSofa == true)
+                              if ((postDetailsController
+                                              .motelPost.value.hasSofa ==
+                                          true &&
+                                      postDetailsController
+                                              .motelRoomChoose.value.id ==
+                                          null) ||
+                                  postDetailsController
+                                          .motelRoomChoose.value.hasSofa ==
+                                      true)
                                 SizedBox(
                                   width: (Get.width - 30) / 4,
                                   height: (Get.width - 30) / 4,
@@ -1613,6 +1857,54 @@ class PostDetailsScreen extends StatelessWidget {
                   ],
                 ),
               ),
+      ),
+    );
+  }
+
+  void shareLink(String link) {
+    SharePost().shareLink(link);
+  }
+
+  void shareQr(String link) {
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) => AlertDialog(
+        title: Center(
+          child: Text(
+            "Mã QR",
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).primaryColor),
+          ),
+        ),
+        content: SizedBox(
+          width: Get.width,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              QrImageView(
+                data: link,
+                version: QrVersions.auto,
+                size: Get.width / 1.5,
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text('Huỷ'),
+          ),
+          TextButton(
+            onPressed: () async {
+              SharePost().shareQrCode(link);
+            },
+            child: const Text('Chia sẻ QR'),
+          ),
+        ],
       ),
     );
   }

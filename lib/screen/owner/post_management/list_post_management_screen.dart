@@ -298,6 +298,7 @@ class _ListPostManagementScreenState extends State<ListPostManagementScreen>
         Get.to(() => PostDetailsScreen(
                   id: item.id!,
                   motelPostInput: item,
+                  isVisibleShareIcon: true,
                   onTapEdit: () {
                     Get.to(() => AddUpdatePostManagementScreen(
                       id: item.id,
