@@ -14,8 +14,6 @@ class _SahaService implements SahaService {
     this.baseUrl,
   }) {
     baseUrl ??= 'http://gohomydev.ikitech.vn//api/';
-    // New domain 
-    // baseUrl ??= 'http://data-api.rencity.vn/';
   }
 
   final Dio _dio;
@@ -7251,6 +7249,52 @@ class _SahaService implements SahaService {
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = AllMotelRoomRes.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<DepositHistoryModel> getDepositHistoryData() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<DepositHistoryModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'admin/deposits',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = DepositHistoryModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<WithdrawHistoryModel> getWithdrawHistoryData() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<WithdrawHistoryModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'admin/withdraws',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = WithdrawHistoryModel.fromJson(_result.data!);
     return value;
   }
 

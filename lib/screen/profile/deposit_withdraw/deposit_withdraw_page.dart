@@ -32,7 +32,7 @@ class DepositWithdrawPage extends StatelessWidget {
             TabbarTile(
               initialIndex: initialIndex,
             ),
-            const Paginator(),
+            // const Paginator(),
           ],
         ),
       ),

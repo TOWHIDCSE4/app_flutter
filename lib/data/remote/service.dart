@@ -72,6 +72,8 @@ import 'package:gohomy/data/remote/response-request/user_manage/request_withdraw
 import 'package:gohomy/data/remote/response-request/user_manage/summary_motel_res.dart';
 import 'package:gohomy/data/remote/response-request/user_manage/user_bill_res.dart';
 import 'package:gohomy/model/bill.dart';
+import 'package:gohomy/screen/profile/deposit_withdraw/domain/deposit_history_model.dart';
+import 'package:gohomy/screen/profile/deposit_withdraw/domain/withdraw_history_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../../const/api.dart';
@@ -1728,4 +1730,14 @@ abstract class SahaService {
     @Query("manage_supporter_id") int? manageSupporterId,
     @Query("is_supporter") bool? isSupporter,
   );
+
+  /// Deposit List
+
+  @GET("admin/deposits")
+  Future<DepositHistoryModel> getDepositHistoryData();
+  
+  /// Withdraw List
+
+  @GET("admin/withdraws")
+  Future<WithdrawHistoryModel> getWithdrawHistoryData();
 }

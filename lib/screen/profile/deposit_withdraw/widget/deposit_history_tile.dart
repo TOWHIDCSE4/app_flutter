@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gohomy/components/loading/loading_widget.dart';
 
 import '../data/deposit_withdraw_repository.dart';
+import '../domain/deposit_history_model.dart';
 import 'history_card_tile.dart';
 
 class DepositHistoryTile extends StatefulWidget {
@@ -13,25 +15,40 @@ class DepositHistoryTile extends StatefulWidget {
 }
 
 class _DepositHistoryTileState extends State<DepositHistoryTile> {
+  bool isLoading = true;
+  List<Deposit> depositInfo = [];
+
   @override
   void initState() {
-    DepositWithDrawRepository.instance.getDepositHistory();
+    getDepositInfo();
     super.initState();
   }
+
+  Future<void> getDepositInfo() async {
+    var data = await DepositWithDrawRepository.instance.getDepositHistory();
+    setState(() {
+      depositInfo = data;
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 10,
-      padding: const EdgeInsets.all(8),
-      itemBuilder: (context, index) {
-        return const HistoryCardTile(
-          amount: '+ 3.500.000',
-          from: 'Từ: 0965305452',
-          content: 'ND: Nạp tiền tài khoản ',
-          subContent: '0965305452',
-          dateTime: '18:36   05/07/2023',
-        );
-      },
-    );
+    return isLoading
+        ? SahaLoadingWidget()
+        : ListView.builder(
+            itemCount: depositInfo.length,
+            padding: const EdgeInsets.all(8),
+            itemBuilder: (context, index) {
+              var deposit = depositInfo[index];
+              return HistoryCardTile(
+                amount: deposit.depositMoney.toString(),
+                from: 'Từ: ${deposit.depositTradingCode}',
+                content: 'ND: ${deposit.depositContent} ',
+                subContent: deposit.accountNumber,
+                dateTime: deposit.depositDateTime,
+              );
+            },
+          );
   }
 }
