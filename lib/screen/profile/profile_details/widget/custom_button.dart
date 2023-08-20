@@ -9,7 +9,7 @@ class CustomButton extends StatelessWidget {
     this.height = 40,
     this.width = double.infinity,
     this.radius = 6,
-    required this.onTap,
+    this.onTap,
   });
 
   final String title;
@@ -17,7 +17,7 @@ class CustomButton extends StatelessWidget {
   final double height;
   final double width;
   final double radius;
-  final VoidCallback onTap;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {

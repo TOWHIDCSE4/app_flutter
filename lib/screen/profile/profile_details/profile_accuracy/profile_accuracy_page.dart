@@ -82,7 +82,7 @@ class _ProfileAccuracyPageState extends State<ProfileAccuracyPage> {
                 height: 50,
                 child: RadioListTile<int>(
                   title: Text(
-                    "Chứng minh thư nhân dân",
+                    "Căn cước công dân",
                     style: TextStyle(
                       color: sValue == 2
                           ? const Color(0xFF664B00)
@@ -149,7 +149,7 @@ class _ProfileAccuracyPageState extends State<ProfileAccuracyPage> {
                         width: size.width * 0.6,
                         bgColor: AppColor.primaryColor,
                         radius: 10,
-                        onTap: () => Get.to(const FrontCardVerificationPage()),
+                        onTap: () => Get.to(() => const FrontCardVerificationPage()),
                       ),
                     ],
                   ),

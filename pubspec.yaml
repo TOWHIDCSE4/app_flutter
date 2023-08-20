@@ -99,6 +99,8 @@ dependencies:
   firebase_analytics: ^10.4.3
   appsflyer_sdk: ^6.11.2
   flutter_dotenv: ^5.1.0
+  image_cropper: ^3.0.1
+  google_mlkit_text_recognition: ^0.5.0
 
 
 flutter_icons:

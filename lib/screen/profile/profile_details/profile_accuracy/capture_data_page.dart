@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/const/image_assets.dart';
+import 'package:gohomy/screen/profile/profile_details/repository/image_repository.dart';
 
 import '../widget/body_text_tile.dart';
 import '../widget/custom_button.dart';
@@ -15,6 +16,7 @@ class CaptureDataPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    ImageRepository imageRepository = ImageRepository.instance;
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6F6),
       appBar: AppBar(
@@ -58,7 +60,7 @@ class CaptureDataPage extends StatelessWidget {
                         ),
                         BodyTextTile(
                           title: 'Họ tên',
-                          data: 'Ngô Thị Khánh Chi',
+                          data: 'Họ tên Vu',
                         ),
                         BodyTextTile(
                           title: 'Ngày sinh',
@@ -134,3 +136,6 @@ class CaptureDataPage extends StatelessWidget {
     );
   }
 }
+
+// String scannedFrontCardText = '';
+// String scannedBackCardText = '';

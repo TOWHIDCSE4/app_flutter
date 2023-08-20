@@ -83,6 +83,11 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
             child: Column(
               children: [
                 ImagePickerTile(
+                  child: SvgPicture.asset(
+                    ImageAssets.profileCamera,
+                    height: 60,
+                    width: 60,
+                  ),
                   onSelectImage: (imagePath) {
                     log(imagePath.toString());
                   },
@@ -150,7 +155,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                           title: 'Hồ sơ',
                           subTitle: 'Xác thực',
                           isVisibleButton: !widget.isEnabled,
-                          onTap: () => Get.to(const ProfileAccuracyPage()),
+                          onTap: () => Get.to(() => const ProfileAccuracyPage()),
                         ),
                         BodyTextTile(
                           title: 'Ngày sinh',

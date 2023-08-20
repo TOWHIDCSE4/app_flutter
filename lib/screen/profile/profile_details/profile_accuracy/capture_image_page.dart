@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/const/image_assets.dart';
+import 'package:gohomy/screen/profile/profile_details/widget/custom_button.dart';
+import 'package:gohomy/screen/profile/profile_details/widget/image_picker_tile.dart';
 
 import 'capture_data_page.dart';
 import 'widgets/card_verification_tile.dart';
@@ -11,6 +15,7 @@ class CaptureImagePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.black12,
       appBar: AppBar(
@@ -25,11 +30,33 @@ class CaptureImagePage extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: CardVerificationTile(
-        title: "xác minh khuôn mặt",
-        instruction: "Xin đưa mặt của bạn vào trước khung hình!",
-        imgPath: ImageAssets.imgCaptureImage,
-        onTapContinue: () => Get.to(const CaptureDataPage()),
+      body: Column(
+        children: [
+          CardVerificationTile(
+            title: "xác minh khuôn mặt",
+            instruction: "Xin đưa mặt của bạn vào trước khung hình!",
+            imgPath: ImageAssets.imgCaptureImage,
+            // onTapContinue: () => Get.to(const CaptureDataPage()),
+          ),
+          const Spacer(),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: ImagePickerTile(
+              child: CustomButton(
+                title: 'Tiếp tục',
+                width: size.width * 0.6,
+                radius: 10,
+              ),
+              onSelectImage: (imagePath) {
+                log(imagePath.toString());
+                Future.delayed(Duration.zero, () {
+                  Get.to(const CaptureDataPage());
+                });
+              },
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
       ),
     );
   }

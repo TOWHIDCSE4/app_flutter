@@ -1,8 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/const/image_assets.dart';
+import 'package:gohomy/screen/profile/profile_details/widget/image_picker_tile.dart';
 
+import '../repository/image_repository.dart';
+import '../widget/custom_button.dart';
+import 'capture_data_page.dart';
 import 'capture_image_page.dart';
 import 'widgets/card_verification_tile.dart';
 
@@ -11,6 +17,7 @@ class BackCardVerificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.black12,
       appBar: AppBar(
@@ -25,11 +32,37 @@ class BackCardVerificationPage extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: CardVerificationTile(
-        title: "mặt sau CMND/CCCD",
-        instruction: "Xin đưa mặt sau của CMND/CCCD vào khung hình, hệ thống sẽ chụp tự động",
-        imgPath: ImageAssets.imgBackCard,
-        onTapContinue: () => Get.to(const CaptureImagePage()),
+      body: Column(
+        children: [
+          CardVerificationTile(
+            title: "mặt sau CMND/CCCD",
+            instruction: "Xin đưa mặt sau của CMND/CCCD vào khung hình, hệ thống sẽ chụp tự động",
+            imgPath: ImageAssets.imgBackCard,
+            // onTapContinue: () => Get.to(const CaptureImagePage()),
+          ),
+          const Spacer(),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: ImagePickerTile(
+              child: CustomButton(
+                title: 'Tiếp tục',
+                width: size.width * 0.6,
+                radius: 10,
+              ),
+              onSelectImage: (imagePath) async {
+                log(imagePath.toString());
+                String recognizedText = await ImageRepository.instance
+                    .convertImageToText(imagePath: imagePath);
+                log(recognizedText);
+                // scannedBackCardText = recognizedText;
+                Future.delayed(Duration.zero, () {
+                  Get.to(() => const CaptureImagePage());
+                });
+              },
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
       ),
     );
   }
