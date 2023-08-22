@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:gohomy/const/color.dart';
-import 'package:gohomy/const/image_assets.dart';
-import 'package:gohomy/screen/profile/profile_details/repository/image_repository.dart';
+import 'package:gohomy/screen/profile/profile_details/controller/registration_controller.dart';
 
 import '../widget/body_text_tile.dart';
 import '../widget/custom_button.dart';
-import '../widget/header_text_tile.dart';
 import 'fill_profile_accuracy_page.dart';
 
 class CaptureDataPage extends StatelessWidget {
@@ -16,7 +13,8 @@ class CaptureDataPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    ImageRepository imageRepository = ImageRepository.instance;
+     RegistrationController registrationController = Get.put(RegistrationController());
+     bool isPeopleId = registrationController.idType.value == IdCardType.peopleID;
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6F6),
       appBar: AppBar(
@@ -49,8 +47,8 @@ class CaptureDataPage extends StatelessWidget {
                     padding: const EdgeInsets.all(12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'Hồ sơ',
                           style: TextStyle(
                             color: AppColor.dark1,
@@ -60,25 +58,34 @@ class CaptureDataPage extends StatelessWidget {
                         ),
                         BodyTextTile(
                           title: 'Họ tên',
-                          data: 'Họ tên Vu',
+                          data: registrationController.scrapeDataFromRecognisedText(
+                            start: isPeopleId ? 'tên' : 'name',
+                            end: isPeopleId ? 'Sin' : 'Ngày',
+                          ),
                         ),
                         BodyTextTile(
                           title: 'Ngày sinh',
-                          data: '00/00/0000',
+                          data: registrationController.scrapeDataFromRecognisedText(
+                            start: isPeopleId ? 'ngày' : 'birth',
+                            end: isPeopleId ? 'Nguyên' : 'Giói',
+                          ),
                         ),
                         BodyTextTile(
                           title: 'Số CMND/CCCD',
-                          data: '001199016666',
+                          data: registrationController.scrapeDataFromRecognisedText(
+                            start: isPeopleId ? 'sỐ' : 'No',
+                            end: isPeopleId ? 'Họ' : 'Họ',
+                          ),
                         ),
-                        BodyTextTile(
+                        const BodyTextTile(
                           title: 'Ngày cấp',
                           data: '00/00/0000',
                         ),
-                        BodyTextTile(
+                        const BodyTextTile(
                           title: 'Nơi cấp',
                           data: 'Công an TP. Hà Nội',
                         ),
-                        BodyTextTile(
+                        const BodyTextTile(
                           title: 'Giới tính',
                           data: 'Nam',
                         ),
@@ -136,6 +143,3 @@ class CaptureDataPage extends StatelessWidget {
     );
   }
 }
-
-// String scannedFrontCardText = '';
-// String scannedBackCardText = '';

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/const/image_assets.dart';
 
+import '../controller/registration_controller.dart';
 import 'front_card_verification_page.dart';
 import '../widget/custom_button.dart';
 import 'widgets/selected_item_tile.dart';
@@ -15,6 +16,7 @@ class ProfileAccuracyPage extends StatefulWidget {
 }
 
 class _ProfileAccuracyPageState extends State<ProfileAccuracyPage> {
+  RegistrationController registrationController = Get.put(RegistrationController());
   int sValue = 1;
   @override
   Widget build(BuildContext context) {
@@ -66,6 +68,7 @@ class _ProfileAccuracyPageState extends State<ProfileAccuracyPage> {
                     setState(() {
                       sValue = value!;
                     });
+                    registrationController.idType.value = IdCardType.peopleID;
                   },
                 ),
               ),
@@ -98,6 +101,7 @@ class _ProfileAccuracyPageState extends State<ProfileAccuracyPage> {
                     setState(() {
                       sValue = value!;
                     });
+                    registrationController.idType.value = IdCardType.citizenId;
                   },
                 ),
               ),

@@ -54,4 +54,24 @@ class ImageRepository {
     );
     return croppedFile;
   }
+
+  //******************************* Filter Text *******************************/
+  String filterIdCardText({
+    required String ocrText,
+    required String start,
+    required String end,
+  }) {
+    String filteredText = 'Not found!';
+    String str = ocrText.toLowerCase();
+    final startIndex = str.indexOf(start.toLowerCase());
+    if (startIndex != -1) {
+      final endIndex = str.indexOf(end.toLowerCase(), startIndex + start.length);
+      filteredText = str
+          .substring(startIndex + start.length, endIndex)
+          .replaceAll(':', '')
+          .replaceAll('.', '')
+          .replaceAll('\n', '');
+    }
+    return filteredText.toUpperCase();
+  }
 }

@@ -7,9 +7,9 @@ import 'package:gohomy/const/image_assets.dart';
 import 'package:gohomy/screen/profile/profile_details/widget/custom_button.dart';
 import 'package:gohomy/screen/profile/profile_details/widget/image_picker_tile.dart';
 
+import '../controller/registration_controller.dart';
 import '../repository/image_repository.dart';
 import 'back_card_verification_page.dart';
-import 'capture_data_page.dart';
 import 'widgets/card_verification_tile.dart';
 
 class FrontCardVerificationPage extends StatelessWidget {
@@ -18,6 +18,7 @@ class FrontCardVerificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    RegistrationController registrationController = Get.put(RegistrationController());
     return Scaffold(
       backgroundColor: Colors.black12,
       appBar: AppBar(
@@ -55,6 +56,7 @@ class FrontCardVerificationPage extends StatelessWidget {
                     .convertImageToText(imagePath: imagePath);
                 log(recognizedText);
                 // scannedFrontCardText = recognizedText;
+                registrationController.scannedFrontCardText.value = recognizedText;
                 Future.delayed(Duration.zero, () {
                  Get.to(() => const BackCardVerificationPage());
                 });
