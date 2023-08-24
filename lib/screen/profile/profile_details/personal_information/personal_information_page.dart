@@ -4,6 +4,7 @@ import 'package:gohomy/const/color.dart';
 import 'package:gohomy/screen/profile/profile_details/profile_details_page.dart';
 import 'package:gohomy/screen/profile/profile_details/widget/custom_button.dart';
 
+import '../controller/registration_controller.dart';
 import 'success_profile_page.dart';
 import 'widgets/custom_textfiield.dart';
 import 'widgets/text_field_title.dart';
@@ -24,6 +25,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    RegistrationController registrationController = Get.put(RegistrationController());
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6F6),
       appBar: AppBar(
@@ -57,11 +59,13 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                   textEditingController: phoneController,
                   hintText: '0123456789',
                   backgroungColor: AppColor.light2,
+                  keyboardType: TextInputType.number,
                 ),
                 const TextFieldTextTitle(title: 'Email'),
                 CustomTextFiled(
                   textEditingController: emailController,
                   hintText: 'abc@gmail.com',
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 const TextFieldTextTitle(title: 'Nghề nghiệp'),
                 CustomTextFiled(
@@ -74,26 +78,38 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                   bgColor: AppColor.primaryColor,
                   // width: size.width * 0.85,
                   onTap: () {
-                    Get.to(ProfileDetailsPage(
-                      dateOfBirth: '00/00/0000',
-                      nid: '001199016666',
-                      creationDay: '00/00/0000',
-                      creationlocate: 'Công an TP. Hà Nội',
-                      sex: 'Nam',
-                      address: '01 ngõ Xã Đàn, Đống Đa, Hà Nội',
-                      phone: '0123456789',
-                      email: 'abcdef@gmail.com',
-                      job: 'Tự do',
-                      isEnabled: true,
-                      onTapContinue: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SuccessProfilePage(),
-                          ),
-                        );
-                      },
-                    ));
+                    if (addressController.text.isNotEmpty &&
+                        phoneController.text.isNotEmpty &&
+                        emailController.text.isNotEmpty &&
+                        jobController.text.isNotEmpty
+                    ) {
+                      registrationController.address.value = addressController.text;
+                      registrationController.phone.value = phoneController.text;
+                      registrationController.email.value = emailController.text;
+                      registrationController.job.value = jobController.text;
+                      Get.to(ProfileDetailsPage(
+                        dateOfBirth: registrationController.dateOfBirth.value,
+                        nid: registrationController.idNumber.value,
+                        creationDay: registrationController.createdDate.value,
+                        creationlocate: registrationController.createdLocation.value,
+                        sex: registrationController.sex.value,
+                        address: registrationController.address.value,
+                        phone: registrationController.phone.value,
+                        email: registrationController.email.value,
+                        job: registrationController.job.value,
+                        imagePath: registrationController.profileImagePath.value,
+                        isEnabled: true,
+                        onTapContinue: () {
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => const SuccessProfilePage(),
+                          //   ),
+                          // );
+                          registrationController.renterRegistration();
+                        },
+                      ));
+                    }
                   },
                 ),
               ],

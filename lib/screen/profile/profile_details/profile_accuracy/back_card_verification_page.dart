@@ -52,6 +52,7 @@ class BackCardVerificationPage extends StatelessWidget {
               ),
               onSelectImage: (imagePath) async {
                 log(imagePath.toString());
+                registrationController.backCardImagePath.value = imagePath!;
                 String recognizedText = await ImageRepository.instance
                     .convertImageToText(imagePath: imagePath);
                 log(recognizedText);

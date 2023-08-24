@@ -7,6 +7,7 @@ import 'package:gohomy/const/image_assets.dart';
 import 'package:gohomy/screen/profile/profile_details/widget/custom_button.dart';
 import 'package:gohomy/screen/profile/profile_details/widget/image_picker_tile.dart';
 
+import '../controller/registration_controller.dart';
 import 'capture_data_page.dart';
 import 'widgets/card_verification_tile.dart';
 
@@ -16,6 +17,7 @@ class CaptureImagePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    RegistrationController registrationController = Get.put(RegistrationController());
     return Scaffold(
       backgroundColor: Colors.black12,
       appBar: AppBar(
@@ -49,6 +51,7 @@ class CaptureImagePage extends StatelessWidget {
               ),
               onSelectImage: (imagePath) {
                 log(imagePath.toString());
+                registrationController.profileImagePath.value = imagePath!;
                 Future.delayed(Duration.zero, () {
                   Get.to(const CaptureDataPage());
                 });

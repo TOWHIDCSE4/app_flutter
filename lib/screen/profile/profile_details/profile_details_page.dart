@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -24,6 +25,7 @@ class ProfileDetailsPage extends StatefulWidget {
     this.phone,
     this.email,
     this.job,
+    this.imagePath,
     this.isEnabled = false,
     this.btnText,
     this.onTapContinue,
@@ -38,6 +40,7 @@ class ProfileDetailsPage extends StatefulWidget {
   final String? phone;
   final String? email;
   final String? job;
+  final String? imagePath;
   final bool isEnabled;
   final String? btnText;
   final VoidCallback? onTapContinue;
@@ -82,7 +85,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                ImagePickerTile(
+                widget.imagePath == null ? ImagePickerTile(
                   child: SvgPicture.asset(
                     ImageAssets.profileCamera,
                     height: 60,
@@ -91,6 +94,11 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                   onSelectImage: (imagePath) {
                     log(imagePath.toString());
                   },
+                ) : CircleAvatar(
+                  radius: 48,
+                  backgroundImage: FileImage(
+                    File(widget.imagePath!),
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Row(

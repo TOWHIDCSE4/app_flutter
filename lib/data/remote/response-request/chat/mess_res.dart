@@ -25,3 +25,31 @@ class MessRes {
   );
 }
 
+class ResponseModel {
+    final int code;
+    final bool success;
+    final String msgCode;
+    final String msg;
+
+    ResponseModel({
+        required this.code,
+        required this.success,
+        required this.msgCode,
+        required this.msg,
+    });
+
+    factory ResponseModel.fromJson(Map<String, dynamic> json) => ResponseModel(
+        code: json["code"],
+        success: json["success"],
+        msgCode: json["msg_code"],
+        msg: json["msg"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "code": code,
+        "success": success,
+        "msg_code": msgCode,
+        "msg": msg,
+    };
+}
+

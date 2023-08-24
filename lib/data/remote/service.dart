@@ -1740,4 +1740,10 @@ abstract class SahaService {
 
   @GET("admin/withdraws")
   Future<WithdrawHistoryModel> getWithdrawHistoryData();
+
+  ///Renter Registration
+  @POST("admin/renters")
+  Future<ResponseModel> renterRegistration(
+    @Body() Map<String, dynamic> body,
+  );
 }

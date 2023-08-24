@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/const/image_assets.dart';
 
+import '../controller/registration_controller.dart';
 import '../personal_information/personal_information_page.dart';
 import '../widget/body_text_tile.dart';
 import '../widget/custom_button.dart';
@@ -15,6 +18,8 @@ class FillProfileAccuracyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    RegistrationController registrationController = Get.put(RegistrationController());
+    bool isPeopleId = registrationController.idType.value == IdCardType.peopleID;
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6F6),
       appBar: AppBar(
@@ -37,15 +42,16 @@ class FillProfileAccuracyPage extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                SvgPicture.asset(
-                  ImageAssets.profileCamera,
-                  height: 60,
-                  width: 60,
+                CircleAvatar(
+                  radius: 48,
+                  backgroundImage: FileImage(
+                    File(registrationController.profileImagePath.value),
+                  ),
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'Ngô Thị Khánh Chi',
-                  style: TextStyle(
+                Text(
+                  registrationController.name.value,
+                  style: const TextStyle(
                     color: Color(0xFF333333),
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
@@ -61,8 +67,8 @@ class FillProfileAccuracyPage extends StatelessWidget {
                     padding: const EdgeInsets.all(12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'Hồ sơ',
                           style: TextStyle(
                             color: AppColor.dark1,
@@ -72,23 +78,23 @@ class FillProfileAccuracyPage extends StatelessWidget {
                         ),
                         BodyTextTile(
                           title: 'Ngày sinh',
-                          data: '00/00/0000',
+                          data: registrationController.dateOfBirth.value,
                         ),
                         BodyTextTile(
                           title: 'Số CMND/CCCD',
-                          data: '001199016666',
+                          data: registrationController.idNumber.value,
                         ),
                         BodyTextTile(
                           title: 'Ngày cấp',
-                          data: '00/00/0000',
+                          data: registrationController.createdDate.value,
                         ),
                         BodyTextTile(
                           title: 'Nơi cấp',
-                          data: 'Công an TP. Hà Nội',
+                          data: registrationController.createdLocation.value,
                         ),
-                        BodyTextTile(
+                        isPeopleId ? const SizedBox.shrink() : BodyTextTile(
                           title: 'Giới tính',
-                          data: 'Nam',
+                          data: registrationController.sex.value,
                         ),
                       ],
                     ),

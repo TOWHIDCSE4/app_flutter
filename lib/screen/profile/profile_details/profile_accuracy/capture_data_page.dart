@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/screen/profile/profile_details/controller/registration_controller.dart';
 
+import '../../../../components/arlert/saha_alert.dart';
 import '../widget/body_text_tile.dart';
 import '../widget/custom_button.dart';
 import 'fill_profile_accuracy_page.dart';
@@ -15,6 +16,7 @@ class CaptureDataPage extends StatelessWidget {
     final size = MediaQuery.of(context).size;
      RegistrationController registrationController = Get.put(RegistrationController());
      bool isPeopleId = registrationController.idType.value == IdCardType.peopleID;
+     registrationController.getAllValuesForRegistration();
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6F6),
       appBar: AppBar(
@@ -58,36 +60,27 @@ class CaptureDataPage extends StatelessWidget {
                         ),
                         BodyTextTile(
                           title: 'Họ tên',
-                          data: registrationController.scrapeDataFromRecognisedText(
-                            start: isPeopleId ? 'tên' : 'name',
-                            end: isPeopleId ? 'Sin' : 'Ngày',
-                          ),
+                          data: registrationController.name.value,
                         ),
                         BodyTextTile(
                           title: 'Ngày sinh',
-                          data: registrationController.scrapeDataFromRecognisedText(
-                            start: isPeopleId ? 'ngày' : 'birth',
-                            end: isPeopleId ? 'Nguyên' : 'Giói',
-                          ),
+                          data: registrationController.dateOfBirth.value,
                         ),
                         BodyTextTile(
                           title: 'Số CMND/CCCD',
-                          data: registrationController.scrapeDataFromRecognisedText(
-                            start: isPeopleId ? 'sỐ' : 'No',
-                            end: isPeopleId ? 'Họ' : 'Họ',
-                          ),
+                          data: registrationController.idNumber.value,
                         ),
-                        const BodyTextTile(
+                        BodyTextTile(
                           title: 'Ngày cấp',
-                          data: '00/00/0000',
+                          data: registrationController.createdDate.value,
                         ),
-                        const BodyTextTile(
+                        BodyTextTile(
                           title: 'Nơi cấp',
-                          data: 'Công an TP. Hà Nội',
+                          data: registrationController.createdLocation.value,
                         ),
-                        const BodyTextTile(
+                        isPeopleId ? const SizedBox.shrink() : BodyTextTile(
                           title: 'Giới tính',
-                          data: 'Nam',
+                          data: registrationController.sex.value,
                         ),
                       ],
                     ),
@@ -133,7 +126,17 @@ class CaptureDataPage extends StatelessWidget {
                   title: 'Xác thực',
                   bgColor: AppColor.primaryColor,
                   width: size.width * 0.85,
-                  onTap: () => Get.to(const FillProfileAccuracyPage()),
+                  onTap: () {
+                    if (registrationController.name.value.toLowerCase().contains('not found') ||
+                    registrationController.dateOfBirth.value.toLowerCase().contains('not found')||
+                    registrationController.idNumber.value.toLowerCase().contains('not found')||
+                    registrationController.createdDate.value.toLowerCase().contains('not found')||
+                    registrationController.createdLocation.value.toLowerCase().contains('not found')) {
+                      SahaAlert.showError(message: 'Thẻ id của bạn không chính xác. Vui lòng chụp lại hình ảnh của bạn.');
+                    } else {
+                      Get.to(const FillProfileAccuracyPage());
+                    }
+                  },
                 ),
               ],
             ),
