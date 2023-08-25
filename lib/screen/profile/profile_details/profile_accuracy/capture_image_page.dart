@@ -52,6 +52,7 @@ class CaptureImagePage extends StatelessWidget {
               onSelectImage: (imagePath) {
                 log(imagePath.toString());
                 registrationController.profileImagePath.value = imagePath!;
+                registrationController.getAllValuesForRegistration();
                 Future.delayed(Duration.zero, () {
                   Get.to(const CaptureDataPage());
                 });

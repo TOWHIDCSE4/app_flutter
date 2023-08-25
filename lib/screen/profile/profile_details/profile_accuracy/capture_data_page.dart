@@ -1,22 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gohomy/const/color.dart';
+import 'package:gohomy/const/image_assets.dart';
 import 'package:gohomy/screen/profile/profile_details/controller/registration_controller.dart';
 
 import '../../../../components/arlert/saha_alert.dart';
 import '../widget/body_text_tile.dart';
 import '../widget/custom_button.dart';
 import 'fill_profile_accuracy_page.dart';
+import 'widgets/custom_textfield_kyc.dart';
 
-class CaptureDataPage extends StatelessWidget {
+class CaptureDataPage extends StatefulWidget {
   const CaptureDataPage({super.key});
 
+  @override
+  State<CaptureDataPage> createState() => _CaptureDataPageState();
+}
+
+class _CaptureDataPageState extends State<CaptureDataPage> {
+  bool isEnableEdit = false;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
      RegistrationController registrationController = Get.put(RegistrationController());
      bool isPeopleId = registrationController.idType.value == IdCardType.peopleID;
-     registrationController.getAllValuesForRegistration();
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6F6),
       appBar: AppBar(
@@ -50,37 +58,80 @@ class CaptureDataPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Hồ sơ',
-                          style: TextStyle(
-                            color: AppColor.dark1,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Hồ sơ',
+                              style: TextStyle(
+                                color: AppColor.dark1,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  isEnableEdit = true;
+                                });
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SvgPicture.asset(
+                                  ImageAssets.editIcon,
+                                  height: 13,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        BodyTextTile(
+                        CustomTextFieldKYC(
                           title: 'Họ tên',
-                          data: registrationController.name.value,
+                          hintText: registrationController.name.value,
+                          enabled: isEnableEdit,
+                          onChanged: (data) {
+                            registrationController.name.value = data;
+                          },
                         ),
-                        BodyTextTile(
+                        CustomTextFieldKYC(
                           title: 'Ngày sinh',
-                          data: registrationController.dateOfBirth.value,
+                          hintText: registrationController.dateOfBirth.value,
+                          enabled: isEnableEdit,
+                          onChanged: (data) {
+                            registrationController.dateOfBirth.value = data;
+                          },
                         ),
-                        BodyTextTile(
+                        CustomTextFieldKYC(
                           title: 'Số CMND/CCCD',
-                          data: registrationController.idNumber.value,
+                          hintText: registrationController.idNumber.value,
+                          enabled: isEnableEdit,
+                          onChanged: (data) {
+                            registrationController.idNumber.value = data;
+                          },
                         ),
-                        BodyTextTile(
+                        CustomTextFieldKYC(
                           title: 'Ngày cấp',
-                          data: registrationController.createdDate.value,
+                          hintText: registrationController.createdDate.value,
+                          enabled: isEnableEdit,
+                          onChanged: (data) {
+                            registrationController.createdDate.value = data;
+                          },
                         ),
-                        BodyTextTile(
+                        CustomTextFieldKYC(
                           title: 'Nơi cấp',
-                          data: registrationController.createdLocation.value,
+                          hintText: registrationController.createdLocation.value,
+                          enabled: isEnableEdit,
+                          onChanged: (data) {
+                            registrationController.createdLocation.value = data;
+                          },
                         ),
-                        isPeopleId ? const SizedBox.shrink() : BodyTextTile(
+                        isPeopleId ? const SizedBox.shrink() : CustomTextFieldKYC(
                           title: 'Giới tính',
-                          data: registrationController.sex.value,
+                          hintText: registrationController.sex.value,
+                          enabled: isEnableEdit,
+                          onChanged: (data) {
+                            registrationController.sex.value = data;
+                          },
                         ),
                       ],
                     ),
@@ -121,7 +172,7 @@ class CaptureDataPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: size.height * 0.22),
+                SizedBox(height: size.height * 0.15),
                 CustomButton(
                   title: 'Xác thực',
                   bgColor: AppColor.primaryColor,

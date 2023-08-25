@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:dio/dio.dart' as multipart;
+import 'package:dio/dio.dart' as dio;
 import 'package:gohomy/components/arlert/saha_alert.dart';
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/data/repository/handle_error.dart';
@@ -33,7 +33,6 @@ class RegistrationController extends GetxController {
 
   var responseMsg = ''.obs;
   ImageRepository imageRepository = ImageRepository.instance;
-
   RegistrationController();
 
   void getAllValuesForRegistration() {
@@ -122,7 +121,9 @@ class RegistrationController extends GetxController {
     }
   }
 
-  Future<void> renterRegistration() async {
+  Future<void> renterOrMasterRegistration({
+    required bool isRenter
+  }) async {
     showDialog(
       context: Get.context!,
       barrierDismissible: false,
@@ -145,16 +146,18 @@ class RegistrationController extends GetxController {
       'job': '',
       "cmnd_front_image_url": frontCardImagePath.value == ''
           ? null
-          : await multipart.MultipartFile.fromFile(frontCardImagePath.value),
+          : await dio.MultipartFile.fromFile(frontCardImagePath.value),
       "cmnd_back_image_url": backCardImagePath.value == ''
           ? null
-          : await multipart.MultipartFile.fromFile(backCardImagePath.value),
+          : await dio.MultipartFile.fromFile(backCardImagePath.value),
       "image_url": profileImagePath.value == ''
           ? null
-          : await multipart.MultipartFile.fromFile(profileImagePath.value),
+          : await dio.MultipartFile.fromFile(profileImagePath.value),
     };
     try {
-      var res = await SahaServiceManager().service?.renterRegistration(body);
+      isRenter
+          ? await SahaServiceManager().service?.renterRegistration(body)
+          : await SahaServiceManager().service?.masterRegistration(body);
       // responseMsg.value = res.msg!;
       Get.back();
       // SahaAlert.showSuccess(message: res.msg!);

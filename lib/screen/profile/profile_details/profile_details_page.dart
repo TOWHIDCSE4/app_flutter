@@ -181,7 +181,8 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                           title: 'Nơi cấp',
                           data: widget.creationlocate,
                         ),
-                        BodyTextTile(
+                        widget.sex.toString().toLowerCase().contains('not found')
+                        ? Container() : BodyTextTile(
                           title: 'Giới tính',
                           data: widget.sex,
                         ),

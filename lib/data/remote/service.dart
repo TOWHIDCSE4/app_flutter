@@ -1746,4 +1746,10 @@ abstract class SahaService {
   Future<ResponseModel> renterRegistration(
     @Body() Map<String, dynamic> body,
   );
+  
+  ///Master Registration
+  @POST("admin/masters")
+  Future<ResponseModel> masterRegistration(
+    @Body() Map<String, dynamic> body,
+  );
 }

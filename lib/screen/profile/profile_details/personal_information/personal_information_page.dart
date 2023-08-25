@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gohomy/const/color.dart';
+import 'package:gohomy/screen/data_app_controller.dart';
 import 'package:gohomy/screen/profile/profile_details/profile_details_page.dart';
 import 'package:gohomy/screen/profile/profile_details/widget/custom_button.dart';
 
@@ -26,6 +27,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     RegistrationController registrationController = Get.put(RegistrationController());
+    DataAppController dataAppController = Get.find();
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6F6),
       appBar: AppBar(
@@ -106,7 +108,17 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                           //     builder: (context) => const SuccessProfilePage(),
                           //   ),
                           // );
-                          registrationController.renterRegistration();
+                          var isHost = dataAppController.badge.value.user?.isHost;
+                          if (isHost == false || isHost == null) {
+                            //renter
+                            registrationController.renterOrMasterRegistration(
+                              isRenter: true,
+                            ); 
+                          } else {
+                            registrationController.renterOrMasterRegistration(
+                              isRenter: false,
+                            ); 
+                          }
                         },
                       ));
                     }
