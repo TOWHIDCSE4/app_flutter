@@ -28,6 +28,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
     final size = MediaQuery.of(context).size;
     RegistrationController registrationController = Get.put(RegistrationController());
     DataAppController dataAppController = Get.find();
+    String number = dataAppController.badge.value.user?.phoneNumber ?? '0123456789';
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6F6),
       appBar: AppBar(
@@ -59,9 +60,10 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                 const TextFieldTextTitle(title: 'Số điện thoại'),
                 CustomTextFiled(
                   textEditingController: phoneController,
-                  hintText: '0123456789',
+                  hintText: number,
                   backgroungColor: AppColor.light2,
                   keyboardType: TextInputType.number,
+                  enabled: false,
                 ),
                 const TextFieldTextTitle(title: 'Email'),
                 CustomTextFiled(
@@ -81,15 +83,15 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                   // width: size.width * 0.85,
                   onTap: () {
                     if (addressController.text.isNotEmpty &&
-                        phoneController.text.isNotEmpty &&
                         emailController.text.isNotEmpty &&
                         jobController.text.isNotEmpty
                     ) {
                       registrationController.address.value = addressController.text;
-                      registrationController.phone.value = phoneController.text;
+                      registrationController.phone.value = number;
                       registrationController.email.value = emailController.text;
                       registrationController.job.value = jobController.text;
                       Get.to(ProfileDetailsPage(
+                        name: registrationController.name.value,
                         dateOfBirth: registrationController.dateOfBirth.value,
                         nid: registrationController.idNumber.value,
                         creationDay: registrationController.createdDate.value,

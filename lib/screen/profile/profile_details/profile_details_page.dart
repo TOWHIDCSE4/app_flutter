@@ -16,6 +16,7 @@ import 'widget/image_picker_tile.dart';
 class ProfileDetailsPage extends StatefulWidget {
   const ProfileDetailsPage({
     super.key,
+    this.name,
     this.dateOfBirth,
     this.nid,
     this.creationDay,
@@ -31,6 +32,7 @@ class ProfileDetailsPage extends StatefulWidget {
     this.onTapContinue,
   });
 
+  final String? name;
   final String? dateOfBirth;
   final String? nid;
   final String? creationDay;
@@ -85,68 +87,72 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                widget.imagePath == null ? ImagePickerTile(
-                  child: SvgPicture.asset(
-                    ImageAssets.profileCamera,
-                    height: 60,
-                    width: 60,
+                widget.imagePath == null
+                // ? ImagePickerTile(
+                //     child: SvgPicture.asset(
+                //       ImageAssets.profileCamera,
+                //       height: 60,
+                //       width: 60,
+                //     ),
+                //     onSelectImage: (imagePath) {
+                //       log(imagePath.toString());
+                //     },
+                //   )
+                ? const SizedBox.shrink()
+                : CircleAvatar(
+                    radius: 48,
+                    backgroundImage: FileImage(
+                      File(widget.imagePath!),
+                    ),
                   ),
-                  onSelectImage: (imagePath) {
-                    log(imagePath.toString());
-                  },
-                ) : CircleAvatar(
-                  radius: 48,
-                  backgroundImage: FileImage(
-                    File(widget.imagePath!),
-                  ),
-                ),
                 const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    isVisibleEditIcon
-                        ? Text(
-                            name,
-                            style: const TextStyle(
-                              color: Color(0xFF333333),
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        : SizedBox(
-                            width: 150,
-                            child: TextField(
-                              controller: nameController,
-                              autofocus: true,
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Ngô Thị Khánh Chi",
-                              ),
-                              onSubmitted: (newValue) {
-                                setState(() {
-                                  isVisibleEditIcon = true;
-                                  name = newValue;
-                                });
-                              },
-                            ),
+                    widget.name == null
+                      ? const SizedBox.shrink()
+                      : Text(
+                          widget.name ?? '',
+                          style: const TextStyle(
+                            color: Color(0xFF333333),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
+                        ),
+                        // : SizedBox(
+                        //     width: 150,
+                        //     child: TextField(
+                        //       controller: nameController,
+                        //       autofocus: true,
+                        //       decoration: const InputDecoration(
+                        //         border: InputBorder.none,
+                        //         hintText: "Ngô Thị Khánh Chi",
+                        //       ),
+                        //       onSubmitted: (newValue) {
+                        //         setState(() {
+                        //           isVisibleEditIcon = true;
+                        //           name = newValue;
+                        //         });
+                        //       },
+                        //     ),
+                        //   ),
                     // const SizedBox(width: 8),
-                    isVisibleEditIcon && !widget.isEnabled
-                        ? InkWell(
-                            onTap: () {
-                              setState(() {
-                                isVisibleEditIcon = false;
-                              });
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SvgPicture.asset(
-                                ImageAssets.editIcon,
-                                height: 13,
-                              ),
-                            ),
-                          )
-                        : const SizedBox.shrink(),
+                    // isVisibleEditIcon && !widget.isEnabled
+                    //     ? InkWell(
+                    //         onTap: () {
+                    //           setState(() {
+                    //             isVisibleEditIcon = false;
+                    //           });
+                    //         },
+                    //         child: Padding(
+                    //           padding: const EdgeInsets.all(8.0),
+                    //           child: SvgPicture.asset(
+                    //             ImageAssets.editIcon,
+                    //             height: 13,
+                    //           ),
+                    //         ),
+                    //       )
+                    //     : const SizedBox.shrink(),
                   ],
                 ),
                 const SizedBox(height: 16),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:badges/badges.dart' as b;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:gohomy/components/dialog/dialog.dart';
 import 'package:gohomy/components/empty/saha_empty_avatar.dart';
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/const/image_assets.dart';
+import 'package:gohomy/const/sp_const.dart';
 import 'package:gohomy/const/test_const.dart';
 
 import 'package:gohomy/screen/admin/admin_screen.dart';
@@ -19,6 +22,7 @@ import 'package:gohomy/screen/profile/favourite_post/favourite_post_screen.dart'
 import 'package:gohomy/screen/profile/profile_controller.dart';
 import 'package:gohomy/screen/profile/service_sell/product_user_screen/product_user_screen.dart';
 import 'package:gohomy/screen/users_bill/user_bill_screen.dart';
+import 'package:gohomy/utils/sp_utils.dart';
 import '../../components/button/saha_button.dart';
 import '../../components/check/check_login_widget.dart';
 import '../../components/empty/saha_empty_image.dart';
@@ -93,10 +97,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
   DataAppController dataAppController = Get.find();
   HomeController homeController = Get.find();
   ProFileController proFileController = ProFileController();
+  bool? kycRegSuccessStatus;
+  String? kycUserName;
+  String? kycUserImage;
+  bool isLoadingSp = true;
+
+  @override
+  void initState() {
+    getKycValuesFromSP();
+    super.initState();
+  }
+
+  Future<void> getKycValuesFromSP() async {
+    kycRegSuccessStatus =
+        await SharedPref.getBoolValueFromSp(SpConstants.kycRegSuccessStatus) ??
+            false;
+    kycUserName =
+        await SharedPref.getStringValueFromSp(SpConstants.kycUserName);
+    kycUserImage =
+        await SharedPref.getStringValueFromSp(SpConstants.kycUserImage);
+    setState(() {
+      isLoadingSp = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
+    return isLoadingSp ? SahaLoadingWidget() : Obx(() {
       if (dataAppController.badge.value.user?.isHost == true &&
           dataAppController.badge.value.user?.isAdmin == true) {
         return adminProfile();
@@ -1397,13 +1424,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             Positioned.fill(
-              top: !TestConst.isEnableDepositWithdraw ? 20: 30,
+              top: kycRegSuccessStatus == true ? 20 : 30,
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(
-                      height: !TestConst.isEnableDepositWithdraw ? 0 : 40,
+                    SizedBox(
+                      height: kycRegSuccessStatus == true ? 0 : 40,
                     ),
                     GestureDetector(
                       onTap: () {
@@ -1461,7 +1488,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   },
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(100.0),
-                                    child: CachedNetworkImage(
+                                    child: kycRegSuccessStatus == true ? 
+                                    Image.file(
+                                      File(kycUserImage ?? ""),
+                                      // dataAppController
+                                      //         .badge.value.user?.avatarImage ??
+                                      //     "",
+                                      // placeholder: (context, url) =>
+                                      //     SahaLoadingWidget(),
+                                      // errorWidget: (context, url, error) =>
+                                      //     const SahaEmptyAvata(
+                                      //   height: 60,
+                                      //   width: 60,
+                                      // ),
+                                      height: 80,
+                                      width: 80,
+                                      fit: BoxFit.cover,
+                                    ) : CachedNetworkImage(
                                       height: 80,
                                       width: 80,
                                       fit: BoxFit.cover,
@@ -1513,16 +1556,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                       ),
                                       Text(
-                                        dataAppController
-                                                .badge.value.user?.name ??
-                                            "",
+                                        // dataAppController
+                                        //         .badge.value.user?.name ??
+                                        //     "",
+                                        kycUserName ?? '',
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      !TestConst.isEnableDepositWithdraw
+                                      kycRegSuccessStatus == true
                                           ? SummaryTile(
                                             goldCoinText: '100.000 Xu vàng',
                                             silverCoinText: '100.000 Xu vàng',
@@ -1562,8 +1606,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(
-                      height: !TestConst.isEnableDepositWithdraw ? 0 : 10,
+                    SizedBox(
+                      height: kycRegSuccessStatus == true ? 0 : 10,
                     ),
                     Container(
                       width: Get.width,

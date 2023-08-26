@@ -5,10 +5,12 @@ import 'package:get/get.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:gohomy/components/arlert/saha_alert.dart';
 import 'package:gohomy/const/color.dart';
+import 'package:gohomy/const/sp_const.dart';
 import 'package:gohomy/data/repository/handle_error.dart';
 import 'package:gohomy/screen/profile/profile_details/personal_information/success_profile_page.dart';
 
 import '../../../../data/remote/saha_service_manager.dart';
+import '../../../../utils/sp_utils.dart';
 import '../repository/image_repository.dart';
 
 class RegistrationController extends GetxController {
@@ -45,10 +47,12 @@ class RegistrationController extends GetxController {
     );
 
     //:::::::::::::::::::::: DATE OF BIRTH ::::::::::::::::::::::
-    dateOfBirth.value = scrapeDataFromRecognisedText(
+    String dob = scrapeDataFromRecognisedText(
       start: isPeopleId ? 'ngày' : 'birth',
       end: isPeopleId ? 'Nguyên' : 'Giói',
     );
+    dateOfBirth.value =
+        dob.toLowerCase().contains('not found!') ? 'dd/mm/yyyy' : dob;
 
     //::::::::::::::::::::::::: ID NUMBER :::::::::::::::::::::::
     idNumber.value = scrapeDataFromRecognisedText(
@@ -64,11 +68,12 @@ class RegistrationController extends GetxController {
     );
     final intInStr = RegExp(r'\d+');
     var res = intInStr.allMatches(createdDateStr).map((m) => m.group(0));
-    createdDate.value = res
+    String crDate = res
         .toString()
         .replaceAll("(", "")
         .replaceAll(")", "")
         .replaceAll(",", "/");
+    createdDate.value = crDate.isEmpty ? "dd/mm/yyyy" : crDate;
 
     //::::::::::::::::::::::: CREATED LOCATION ::::::::::::::::::
     if (idType.value == IdCardType.peopleID) {
@@ -84,11 +89,13 @@ class RegistrationController extends GetxController {
         createdLocation.value = extractedText;
       }
     } else {
-      createdLocation.value = scrapeDataFromRecognisedText(
+      String location = scrapeDataFromRecognisedText(
         idCardSide: IdCardSide.back,
         start: 'CẢNH SÁT',
         end: 'DIRECTOR',
       );
+      createdLocation.value =
+        location.toLowerCase().contains('not found!') ? 'Noi cap' : location;
     }
 
     //:::::::::::::::::::::::::::::: SEX ::::::::::::::::::::::::
@@ -121,9 +128,7 @@ class RegistrationController extends GetxController {
     }
   }
 
-  Future<void> renterOrMasterRegistration({
-    required bool isRenter
-  }) async {
+  Future<void> renterOrMasterRegistration({required bool isRenter}) async {
     showDialog(
       context: Get.context!,
       barrierDismissible: false,
@@ -161,7 +166,9 @@ class RegistrationController extends GetxController {
       // responseMsg.value = res.msg!;
       Get.back();
       // SahaAlert.showSuccess(message: res.msg!);
-      log('message');
+      await SharedPref.saveStringValueToSp(SpConstants.kycUserName, name.value);
+      await SharedPref.saveStringValueToSp(SpConstants.kycUserImage, profileImagePath.value);
+      await SharedPref.saveBoolValueToSp(SpConstants.kycRegSuccessStatus, true);
       Get.to(() => const SuccessProfilePage());
     } catch (err) {
       Get.back();
