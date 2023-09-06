@@ -77,6 +77,7 @@ import 'package:gohomy/screen/profile/deposit_withdraw/domain/withdraw_history_m
 import 'package:retrofit/retrofit.dart';
 
 import '../../const/api.dart';
+import '../../screen/profile/model/renter_master_model.dart';
 import '../../utils/user_info.dart';
 import 'response-request/account/all_user_res.dart';
 import 'response-request/account/badge_res.dart';
@@ -1751,5 +1752,17 @@ abstract class SahaService {
   @POST("admin/masters")
   Future<ResponseModel> masterRegistration(
     @Body() Map<String, dynamic> body,
+  );
+  
+  ///Get Renter By User Id
+  @GET("admin/renters/getRenterByUserid/{id}")
+  Future<RenterMasterModel> getRenterByUserid(
+    @Path("id") int renterUserId,
+  );
+  
+  ///Get Master By User Id
+  @GET("admin/masters/getMasterByUserid/{id}")
+  Future<RenterMasterModel> getMasterByUserid(
+    @Path("id") int masterUserId,
   );
 }

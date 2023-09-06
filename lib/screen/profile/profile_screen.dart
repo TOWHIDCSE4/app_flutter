@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:badges/badges.dart' as b;
@@ -11,12 +12,14 @@ import 'package:gohomy/const/color.dart';
 import 'package:gohomy/const/image_assets.dart';
 import 'package:gohomy/const/sp_const.dart';
 import 'package:gohomy/const/test_const.dart';
+import 'package:gohomy/data/remote/saha_service_manager.dart';
 
 import 'package:gohomy/screen/admin/admin_screen.dart';
 import 'package:gohomy/screen/admin/notification_admin/notification_screen.dart';
 
 import 'package:gohomy/screen/data_app_controller.dart';
 import 'package:gohomy/screen/profile/bill/bill_screen.dart';
+import 'package:gohomy/screen/profile/deposit_withdraw/data/deposit_withdraw_repository.dart';
 import 'package:gohomy/screen/profile/deposit_withdraw/deposit_withdraw_page.dart';
 import 'package:gohomy/screen/profile/favourite_post/favourite_post_screen.dart';
 import 'package:gohomy/screen/profile/profile_controller.dart';
@@ -97,10 +100,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   DataAppController dataAppController = Get.find();
   HomeController homeController = Get.find();
   ProFileController proFileController = ProFileController();
-  bool? kycRegSuccessStatus;
-  String? kycUserName;
-  String? kycUserImage;
+  bool kycRegSuccessStatus = false;
+  String kycUserName = '';
+  String kycUserImage = '';
   bool isLoadingSp = true;
+  DepositWithDrawRepository depositWithDrawRepository =
+      DepositWithDrawRepository.instance;
 
   @override
   void initState() {
@@ -109,13 +114,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> getKycValuesFromSP() async {
-    kycRegSuccessStatus =
-        await SharedPref.getBoolValueFromSp(SpConstants.kycRegSuccessStatus) ??
-            false;
-    kycUserName =
-        await SharedPref.getStringValueFromSp(SpConstants.kycUserName);
-    kycUserImage =
-        await SharedPref.getStringValueFromSp(SpConstants.kycUserImage);
+    var checkDepositList = await depositWithDrawRepository.getDepositHistory();
+    setState(() {
+      kycRegSuccessStatus = checkDepositList.isEmpty ? false : true;
+    });
+
+    var isHost = dataAppController.badge.value.user?.isHost;
+    var userId = dataAppController.badge.value.user?.id;
+    if (isHost == false || isHost == null) {
+      //renter
+      try {
+        var renterData =
+            await SahaServiceManager().service!.getRenterByUserid(userId!);
+        setState(() {
+          kycUserName = renterData.data.name;
+          kycUserImage = renterData.data.imageUrl;
+        });
+      } catch (e) {
+        setState(() {
+          isLoadingSp = false;
+        });
+      }
+    } else {
+      //master
+      try {
+        var masterData =
+            await SahaServiceManager().service!.getMasterByUserid(userId!);
+        log('Eza::master: ${masterData.data.name}');
+        setState(() {
+          kycUserName = masterData.data.name;
+          kycUserImage = masterData.data.imageUrl;
+        });
+      } catch (e) {
+        setState(() {
+          isLoadingSp = false;
+        });
+      }
+    }
     setState(() {
       isLoadingSp = false;
     });
@@ -123,26 +158,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoadingSp ? SahaLoadingWidget() : Obx(() {
-      if (dataAppController.badge.value.user?.isHost == true &&
-          dataAppController.badge.value.user?.isAdmin == true) {
-        return adminProfile();
-      }
-      if (dataAppController.badge.value.user?.isAdmin == true) {
-        return adminProfile();
-      }
+    return isLoadingSp
+        ? SahaLoadingWidget()
+        : Obx(() {
+            if (dataAppController.badge.value.user?.isHost == true &&
+                dataAppController.badge.value.user?.isAdmin == true) {
+              return adminProfile();
+            }
+            if (dataAppController.badge.value.user?.isAdmin == true) {
+              return adminProfile();
+            }
 
-      if (dataAppController.badge.value.user?.isHost == true) {
-        return hostProfile();
-      }
+            if (dataAppController.badge.value.user?.isHost == true) {
+              return hostProfile();
+            }
 
-      if (dataAppController.badge.value.user?.isHost == false ||
-          dataAppController.badge.value.user?.isHost == null) {
-        return usersProfile();
-      }
+            if (dataAppController.badge.value.user?.isHost == false ||
+                dataAppController.badge.value.user?.isHost == null) {
+              return usersProfile();
+            }
 
-      return Container();
-    });
+            return Container();
+          });
   }
 
   Widget optionProfile(
@@ -1488,29 +1525,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   },
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(100.0),
-                                    child: kycRegSuccessStatus == true ? 
-                                    Image.file(
-                                      File(kycUserImage ?? ""),
-                                      // dataAppController
-                                      //         .badge.value.user?.avatarImage ??
-                                      //     "",
-                                      // placeholder: (context, url) =>
-                                      //     SahaLoadingWidget(),
-                                      // errorWidget: (context, url, error) =>
-                                      //     const SahaEmptyAvata(
-                                      //   height: 60,
-                                      //   width: 60,
-                                      // ),
+                                    child: CachedNetworkImage(
                                       height: 80,
                                       width: 80,
                                       fit: BoxFit.cover,
-                                    ) : CachedNetworkImage(
-                                      height: 80,
-                                      width: 80,
-                                      fit: BoxFit.cover,
-                                      imageUrl: dataAppController
-                                              .badge.value.user?.avatarImage ??
-                                          "",
+                                      imageUrl: kycRegSuccessStatus == true
+                                          ? kycUserImage!
+                                          : dataAppController.badge.value.user
+                                                  ?.avatarImage ??
+                                              "",
                                       // placeholder: (context, url) =>
                                       //     SahaLoadingWidget(),
                                       errorWidget: (context, url, error) =>
@@ -1568,14 +1591,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                       kycRegSuccessStatus == true
                                           ? SummaryTile(
-                                            goldCoinText: '100.000 Xu vàng',
-                                            silverCoinText: '100.000 Xu vàng',
-                                            onTap: () => Get.to(() => const DepositWithdrawPage()),
-                                          )
+                                              goldCoinText: '100.000 Xu vàng',
+                                              silverCoinText: '100.000 Xu vàng',
+                                              onTap: () => Get.to(() =>
+                                                  const DepositWithdrawPage()),
+                                            )
                                           : ActivedButton(
-                                            title: 'Kích hoạt',
-                                            onTap: () => Get.to(() => const ProfileDetailsPage()),
-                                          ),
+                                              title: 'Kích hoạt',
+                                              onTap: () => Get.to(() =>
+                                                  const ProfileDetailsPage()),
+                                            ),
                                       // const SizedBox(height: 10),
                                     ],
                                   ),
