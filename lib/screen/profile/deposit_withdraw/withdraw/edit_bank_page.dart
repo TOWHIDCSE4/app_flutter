@@ -4,21 +4,41 @@ import 'package:gohomy/const/color.dart';
 import 'package:gohomy/screen/profile/deposit_withdraw/withdraw/widgets/custom_withdraw_appbar.dart';
 import 'package:gohomy/screen/profile/profile_details/personal_information/widgets/custom_textfiield.dart';
 import 'package:gohomy/screen/profile/profile_details/personal_information/widgets/text_field_title.dart';
-import 'package:gohomy/screen/profile/profile_details/profile_details_page.dart';
 import 'package:gohomy/screen/profile/profile_details/widget/custom_button.dart';
 
+import '../domain/withdraw_history_model.dart';
+
 class EditBankPage extends StatefulWidget {
-  const EditBankPage({super.key});
+  const EditBankPage({
+    super.key,
+    required this.withdrawInfo,
+  });
+
+  final Withdraw withdrawInfo;
 
   @override
   State<EditBankPage> createState() => _EditBankPageState();
 }
 
 class _EditBankPageState extends State<EditBankPage> {
-  TextEditingController addressController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController jobController = TextEditingController();
+  late TextEditingController bankNameController;
+  TextEditingController accountNumberController = TextEditingController();
+  TextEditingController accountHolderController = TextEditingController();
+
+  @override
+  void initState() {
+    bankNameController = TextEditingController(text: widget.withdrawInfo.bankName);
+    accountNumberController = TextEditingController(text: widget.withdrawInfo.accountNumber);
+    accountHolderController = TextEditingController(text: widget.withdrawInfo.bankAccountHolderName);
+    super.initState();
+  }
+  @override
+  void dispose() {
+    bankNameController.dispose();
+    accountNumberController.dispose();
+    accountHolderController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -36,19 +56,19 @@ class _EditBankPageState extends State<EditBankPage> {
               children: [
                 const TextFieldTextTitle(title: 'Ngân hàng'),
                 CustomTextFiled(
-                  textEditingController: phoneController,
+                  textEditingController: bankNameController,
                   hintText: 'Vietcombank - Ngân hàng TMCP Ngoại thương',
                   backgroungColor: AppColor.light2,
                 ),
                 const TextFieldTextTitle(title: 'Số tài khoản'),
                 CustomTextFiled(
-                  textEditingController: emailController,
+                  textEditingController: accountNumberController,
                   hintText: '10335665233',
                   keyboardType: TextInputType.number,
                 ),
                 const TextFieldTextTitle(title: 'Chủ tài khoản'),
                 CustomTextFiled(
-                  textEditingController: jobController,
+                  textEditingController: accountHolderController,
                   hintText: 'VŨ ANH TÙNG',
                 ),
                 SizedBox(height: size.height * 0.25),

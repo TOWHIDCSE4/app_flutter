@@ -129,7 +129,11 @@ class _WithdrawEntryPageState extends State<WithdrawEntryPage> {
                   radius: 4,
                   height: 48,
                   bgColor: isTyping ? AppColor.primaryColor : AppColor.light3,
-                  onTap: () => Get.to(const ChooseBankPage()),
+                  onTap: () {
+                    if (isTyping) {
+                      Get.to(const ChooseBankPage());
+                    }
+                  },
                 ),
               )
             : null,

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gohomy/components/loading/loading_widget.dart';
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/const/image_assets.dart';
 
+import '../controller/withdraw_controller.dart';
 import 'add_bank_account_page.dart';
 import 'edit_bank_page.dart';
 import 'widgets/bank_info_card_tile.dart';
@@ -14,6 +16,8 @@ class ChooseBankPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WithdrawController withdrawController = Get.put(WithdrawController());
+    withdrawController.getWithdrawList();
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
       appBar: const CustomWithdrawAppBar(
@@ -44,33 +48,44 @@ class ChooseBankPage extends StatelessWidget {
                 ),
               ],
             ),
-            ListView.builder(
-              itemCount: 2,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return BankInfoCardTile(
-                  imgPath: ImageAssets.icBank1,
-                  bankName: 'Vietcombank',
-                  bankStatus: 'Ngân hàng TMCP Ngoại thương Việt Nam',
-                  accountNumber: 'Số tài khoản - 10335665233',
-                  accountHolder: 'Chủ tài khoản - VŨ ANH TÙNG',
-                  onTapBank: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(25.0),
-                        ),
+            Obx(
+              () => Expanded(
+                child: withdrawController.isLoadingWithdrawList.value
+                    ? Center(
+                        child: SahaLoadingWidget(),
+                      )
+                    : ListView.builder(
+                        itemCount: withdrawController.withdrawList.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          var withdrawInfo = withdrawController.withdrawList[index];
+                          return BankInfoCardTile(
+                            imgPath: ImageAssets.icBank1,
+                            bankName: withdrawInfo.bankName,
+                            bankStatus: 'Ngân hàng TMCP Ngoại thương Việt Nam',
+                            accountNumber: 'Số tài khoản - ${withdrawInfo.accountNumber}',
+                            accountHolder: 'Chủ tài khoản - ${withdrawInfo.bankAccountHolderName}',
+                            onTapBank: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(25.0),
+                                  ),
+                                ),
+                                builder: (context) {
+                                  return const ConfirmWithdrawBottomSheetDialog();
+                                },
+                              );
+                            },
+                            onTapEdit: () => Get.to(EditBankPage(
+                              withdrawInfo: withdrawInfo,
+                            )),
+                          );
+                        },
                       ),
-                      builder: (context) {
-                        return const ConfirmWithdrawBottomSheetDialog();
-                      },
-                    );
-                  },
-                  onTapEdit: () => Get.to(const EditBankPage()),
-                );
-              },
+              ),
             ),
           ],
         ),
