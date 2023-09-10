@@ -9,9 +9,8 @@ class ProFileController extends GetxController {
   var summary = Summary().obs;
   DataAppController dataAppController = Get.find();
 
-
-
   ProFileController();
+  
   Future<void> getSummary() async {
     try {
       var res = await RepositoryManager.userManageRepository.getSummary();

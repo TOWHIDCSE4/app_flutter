@@ -7,6 +7,7 @@ import 'package:gohomy/data/remote/saha_service_manager.dart';
 import 'package:gohomy/data/repository/handle_error.dart';
 import 'package:gohomy/screen/profile/deposit_withdraw/domain/withdraw_history_model.dart';
 
+import '../domain/banklist_model.dart';
 import '../domain/deposit_history_model.dart';
 
 class DepositWithDrawRepository {
@@ -35,5 +36,17 @@ class DepositWithDrawRepository {
       handleError(err);
     }
     return withdrawList;
+  }
+  
+  Future<List<BankList>> getUserBankList() async {
+    List<BankList> bankList = [];
+    try {
+      UserBankList info = await SahaServiceManager().service!.getBankList();
+      bankList = info.data.data;
+      return bankList;
+    } catch (err) {
+      handleError(err);
+    }
+    return bankList;
   }
 }

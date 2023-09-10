@@ -22,8 +22,8 @@ class EditBankPage extends StatefulWidget {
 
 class _EditBankPageState extends State<EditBankPage> {
   late TextEditingController bankNameController;
-  TextEditingController accountNumberController = TextEditingController();
-  TextEditingController accountHolderController = TextEditingController();
+  late TextEditingController accountNumberController;
+  late TextEditingController accountHolderController;
 
   @override
   void initState() {

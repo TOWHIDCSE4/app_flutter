@@ -100,10 +100,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   DataAppController dataAppController = Get.find();
   HomeController homeController = Get.find();
   ProFileController proFileController = ProFileController();
-  bool kycRegSuccessStatus = false;
+  bool kycRegSuccessStatus = true;
   String kycUserName = '';
   String kycUserImage = '';
-  bool isLoadingSp = true;
+  bool isLoadingSp = false;
   DepositWithDrawRepository depositWithDrawRepository =
       DepositWithDrawRepository.instance;
 

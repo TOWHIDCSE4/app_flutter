@@ -3,13 +3,17 @@ import 'package:get/get.dart';
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/screen/profile/profile_details/widget/custom_button.dart';
 
+import '../../domain/withdraw_history_model.dart';
 import '../withdraw_otp_page.dart';
 import 'withdraw_text_tile.dart';
 
 class ConfirmWithdrawBottomSheetDialog extends StatelessWidget {
   const ConfirmWithdrawBottomSheetDialog({
     super.key,
+    required this.withdrawInfo,
   });
+
+  final Withdraw withdrawInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -51,17 +55,17 @@ class ConfirmWithdrawBottomSheetDialog extends StatelessWidget {
               fontWeight: FontWeight.w400,
             ),
           ),
-          const Text(
-            'VŨ ANH TÙNG',
-            style: TextStyle(
+          Text(
+            withdrawInfo.bankAccountHolderName,
+            style: const TextStyle(
               color: AppColor.dark1,
               fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
           ),
-          const Text(
-            'Số tài khoản 10335665233',
-            style: TextStyle(
+          Text(
+            'Số tài khoản ${withdrawInfo.accountNumber}',
+            style: const TextStyle(
               color: AppColor.dark1,
               fontSize: 14,
               fontWeight: FontWeight.w400,
@@ -76,14 +80,14 @@ class ConfirmWithdrawBottomSheetDialog extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          const WithdrawTextTile(
+          WithdrawTextTile(
             title: 'Nội dung',
-            value: 'Rút tiền Rencity',
+            value: withdrawInfo.withdrawContent,
             valueFontSize: 14,
           ),
-          const WithdrawTextTile(
+          WithdrawTextTile(
             title: 'Số tiền rút',
-            value: '1.000.000 VNĐ',
+            value: '${withdrawInfo.withdrawMoney} VNĐ',
             valueFontSize: 14,
             valueColor: AppColor.primaryColor,
           ),
@@ -92,9 +96,9 @@ class ConfirmWithdrawBottomSheetDialog extends StatelessWidget {
             value: '12.000 VNĐ',
             valueFontSize: 14,
           ),
-          const WithdrawTextTile(
+          WithdrawTextTile(
             title: 'Mã giao dịch',
-            value: 'F12949FJFKFNYY',
+            value: withdrawInfo.withdrawTradingCode,
             valueFontSize: 14,
           ),
           CustomButton(

@@ -75,7 +75,9 @@ class ChooseBankPage extends StatelessWidget {
                                   ),
                                 ),
                                 builder: (context) {
-                                  return const ConfirmWithdrawBottomSheetDialog();
+                                  return ConfirmWithdrawBottomSheetDialog(
+                                    withdrawInfo: withdrawInfo,
+                                  );
                                 },
                               );
                             },
