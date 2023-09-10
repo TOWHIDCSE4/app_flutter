@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gohomy/const/color.dart';
+import 'package:gohomy/data/remote/saha_service_manager.dart';
 import 'package:gohomy/screen/profile/deposit_withdraw/withdraw/widgets/custom_withdraw_appbar.dart';
 import 'package:gohomy/screen/profile/profile_details/personal_information/widgets/custom_textfiield.dart';
 import 'package:gohomy/screen/profile/profile_details/personal_information/widgets/text_field_title.dart';
 import 'package:gohomy/screen/profile/profile_details/widget/custom_button.dart';
 
+import '../controller/withdraw_controller.dart';
 import '../domain/withdraw_history_model.dart';
 
 class EditBankPage extends StatefulWidget {
   const EditBankPage({
     super.key,
     required this.withdrawInfo,
+    required this.id,
   });
 
   final Withdraw withdrawInfo;
+  final int id;
 
   @override
   State<EditBankPage> createState() => _EditBankPageState();
@@ -42,6 +46,7 @@ class _EditBankPageState extends State<EditBankPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    WithdrawController withdrawController = Get.put(WithdrawController());
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
       appBar: const CustomWithdrawAppBar(
@@ -76,7 +81,19 @@ class _EditBankPageState extends State<EditBankPage> {
                   title: 'Cập nhật',
                   bgColor: AppColor.primaryColor,
                   // width: size.width * 0.85,
-                  onTap: () => Get.back(),
+                  onTap: () {
+                      Map<String, dynamic> body = {
+                        "account_number": accountNumberController.text,
+                        "bank_account_holder_name": accountHolderController.text,
+                        "bank_name": bankNameController.text,
+                        "withdraw_money": widget.withdrawInfo.withdrawMoney,
+                        "withdraw_content": widget.withdrawInfo.withdrawContent,
+                      };
+                      withdrawController.editBankInfo(
+                        id: widget.id,
+                        body: body,
+                      );
+                    }
                 ),
               ],
             ),

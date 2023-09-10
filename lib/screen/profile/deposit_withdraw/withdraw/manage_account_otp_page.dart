@@ -2,15 +2,22 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:gohomy/const/color.dart';
 import 'package:gohomy/screen/profile/deposit_withdraw/withdraw/widgets/custom_withdraw_appbar.dart';
 import 'package:gohomy/screen/profile/profile_details/widget/custom_button.dart';
 
+import '../controller/withdraw_controller.dart';
 import 'manage_account_otp_success_page.dart';
 import 'widgets/otp_digit_textfieldbox.dart';
 
 class ManageAccountOTPPage extends StatefulWidget {
-  const ManageAccountOTPPage({super.key});
+  const ManageAccountOTPPage({
+    Key? key,
+    required this.body,
+  }) : super(key: key);
+
+  final Map<String, dynamic> body;
 
   @override
   State<ManageAccountOTPPage> createState() => _ManageAccountOTPPageState();
@@ -21,6 +28,7 @@ class _ManageAccountOTPPageState extends State<ManageAccountOTPPage> {
 
   @override
   Widget build(BuildContext context) {
+    WithdrawController withdrawController = Get.put(WithdrawController());
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomWithdrawAppBar(
@@ -153,7 +161,7 @@ class _ManageAccountOTPPageState extends State<ManageAccountOTPPage> {
                   onTap: () {
                     log('OTP: $otp');
                     if (otp.length == 6) {
-                      Get.to(const ManageAccountOTPSuccessPage());
+                      withdrawController.addBank(body: widget.body);
                     }
                   },
                 ),

@@ -1770,4 +1770,17 @@ abstract class SahaService {
   ///Get User Bank List
   @GET("getUserBankList")
   Future<UserBankList> getBankList();
+
+  ///Edit Bank Info
+  @PUT("edit_bank_info/{id}")
+  Future<ResponseModel> editBankInfo(
+    @Path("id") int id,
+    @Body() Map<String, dynamic> body,
+  );
+
+  ///Add Bank
+  @POST("addBank")
+  Future<ResponseModel> addBank(
+    @Body() Map<String, dynamic> body,
+  );
 }

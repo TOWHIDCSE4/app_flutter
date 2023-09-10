@@ -83,6 +83,7 @@ class ChooseBankPage extends StatelessWidget {
                             },
                             onTapEdit: () => Get.to(EditBankPage(
                               withdrawInfo: withdrawInfo,
+                              id: index + 1,
                             )),
                           );
                         },

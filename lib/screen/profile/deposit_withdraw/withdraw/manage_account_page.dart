@@ -77,7 +77,16 @@ class _ManageAccountPageState extends State<ManageAccountPage> {
                   bgColor: AppColor.primaryColor,
                   // width: size.width * 0.85,
                   onTap: () {
-                    Get.to(const ManageAccountOTPPage());
+                    Map<String, dynamic> body = {
+                        "account_number": accountNumberController.text,
+                        "bank_account_holder_name": accountHolderController.text,
+                        "bank_name": bankNameController.text,
+                        // "withdraw_money": widget.bankInfo.withdrawMoney,
+                        // "withdraw_content": widget.bankInfo.withdrawContent,
+                      };
+                    Get.to(ManageAccountOTPPage(
+                      body: body,
+                    ));
                   },
                 ),
               ],
